@@ -65,6 +65,10 @@
   }
   .baixar:active { transform: scale(.97); }
   .baixar svg { width: 20px; height: 20px; flex: none; }
+  .so-iphone {
+    text-align: center; color: var(--apagado); font-weight: 700; font-size: 15px;
+    border: 1px dashed var(--borda); border-radius: 14px; padding: 13px 16px;
+  }
 
   footer { text-align: center; margin-top: 26px; }
   footer a { color: var(--apagado); font-weight: 700; font-size: 14px; text-decoration: none; }
@@ -109,7 +113,7 @@
     </a>
   </section>
 
-  <section class="jogo" data-id="6809085355">
+  <section class="jogo" data-id="6809085355" data-play="https://play.google.com/store/apps/details?id=com.tales.craquefoot">
     <div class="topo">
       <img class="icone" src="img/craquefoot.jpg" alt="">
       <div>
@@ -128,6 +132,23 @@
 </main>
 
 <script>
+  // No Android, o botão da App Store não serve: o Craquefoot vai para o Google Play e os outros avisam.
+  if (/android/i.test(navigator.userAgent)) {
+    var PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 1.8c-.3.3-.4.7-.4 1.2v18c0 .5.1.9.4 1.2l10-10.2-10-10.2zm11.2 9L5.3 1.2l11.9 6.8-2.4 2.8zm0 2.4l2.4 2.8-11.9 6.8 9.5-9.6zm3.6-4.4 2.7 1.6c.8.5.8 1.7 0 2.2l-2.7 1.6-2.7-2.7 2.7-2.7z"/></svg>';
+    document.querySelectorAll('.jogo').forEach(function (card) {
+      var botao = card.querySelector('.baixar');
+      if (card.dataset.play) {
+        botao.href = card.dataset.play;
+        botao.innerHTML = PLAY + ' Baixar grátis no Google Play';
+      } else {
+        var aviso = document.createElement('p');
+        aviso.className = 'so-iphone';
+        aviso.textContent = 'Só no iPhone, por enquanto';
+        botao.replaceWith(aviso);
+      }
+    });
+  }
+
   // Nota e avaliações ao vivo da App Store (o HTML já traz os números de 20/10/2026, caso falhe).
   window.notas = function (res) {
     (res.results || []).forEach(function (app) {
