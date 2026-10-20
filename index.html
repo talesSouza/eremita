@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eremita Jogos</title>
+<meta name="description" content="Jogos feitos por um dev solo, pra jogar com todo mundo num celular só. Grátis na App Store.">
+<meta property="og:title" content="Eremita Jogos">
+<meta property="og:description" content="Jogos feitos por um dev solo, pra jogar com todo mundo num celular só.">
+<meta property="og:image" content="https://talessouza.github.io/eremita/img/eremita.jpg">
+<meta name="theme-color" content="#231A4E">
+<link rel="icon" href="img/eremita.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noite: #231A4E;
+    --cartao: #2E2563;
+    --borda: #3B3178;
+    --manto: #F25C54;
+    --lanterna: #FFD447;
+    --creme: #FFF4E0;
+    --apagado: #B9B0DA;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--noite);
+    color: var(--creme);
+    font-family: Nunito, system-ui, sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 440px; margin: 0 auto; padding: 40px 16px 48px; }
+
+  header { text-align: center; margin-bottom: 28px; }
+  .avatar { position: relative; width: 112px; height: 112px; margin: 0 auto 14px; }
+  .avatar::before {
+    content: ""; position: absolute; inset: -18px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 212, 71, .22), transparent 68%);
+  }
+  .avatar img { position: relative; width: 100%; height: 100%; border-radius: 50%; display: block; }
+  h1 { font-weight: 900; font-size: 30px; letter-spacing: -.3px; }
+  .lema { color: var(--apagado); font-weight: 600; font-size: 16px; line-height: 1.45; margin-top: 6px; text-wrap: balance; }
+
+  .jogo {
+    background: var(--cartao);
+    border: 1px solid var(--borda);
+    border-radius: 22px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .topo { display: flex; gap: 14px; align-items: center; }
+  .icone { width: 72px; height: 72px; border-radius: 17px; flex: none; display: block; }
+  .nome { font-weight: 900; font-size: 21px; line-height: 1.15; }
+  .nota { color: var(--lanterna); font-weight: 800; font-size: 14px; margin-top: 3px; }
+  .nota span { color: var(--apagado); font-weight: 600; }
+  .nota i { font-style: normal; }
+  .sobre { color: var(--creme); opacity: .86; font-weight: 600; font-size: 15px; line-height: 1.45; margin: 12px 0 14px; }
+  .baixar {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--manto); color: #fff; text-decoration: none;
+    border-radius: 14px; padding: 13px 16px; font-weight: 800; font-size: 17px;
+    transition: transform .12s ease;
+  }
+  .baixar:active { transform: scale(.97); }
+  .baixar svg { width: 20px; height: 20px; flex: none; }
+
+  footer { text-align: center; margin-top: 26px; }
+  footer a { color: var(--apagado); font-weight: 700; font-size: 14px; text-decoration: none; }
+  footer a:hover { color: var(--creme); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="avatar"><img src="img/eremita.jpg" alt="O eremita da Eremita Jogos, de manto vermelho e lanterna"></div>
+    <h1>Eremita Jogos</h1>
+    <p class="lema">Feito por dev solo, pra jogar com todo mundo :)</p>
+  </header>
+
+  <section class="jogo" data-id="6468999579">
+    <div class="topo">
+      <img class="icone" src="img/supersenha.jpg" alt="">
+      <div>
+        <p class="nome">Super Senha</p>
+        <p class="nota">★ <b>4,9</b> <span>· <i>502</i> avaliações</span></p>
+      </div>
+    </div>
+    <p class="sobre">Um dá a dica, o outro adivinha, e cada um só pode falar uma palavra por vez. Fácil de explicar, difícil de parar.</p>
+    <a class="baixar" href="https://apps.apple.com/br/app/super-senha-jogo-de-palavras/id6468999579">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+      Baixar grátis na App Store
+    </a>
+  </section>
+
+  <section class="jogo" data-id="6799121116">
+    <div class="topo">
+      <img class="icone" src="img/perfilsecreto.jpg" alt="">
+      <div>
+        <p class="nome">Perfil Secreto</p>
+        <p class="nota">★ <b>5,0</b> <span>· <i>12</i> avaliações</span></p>
+      </div>
+    </div>
+    <p class="sobre">Um segredo por carta. Dez dicas, da mais vaga à quase óbvia. Quem adivinha primeiro, com menos dicas, leva mais pontos.</p>
+    <a class="baixar" href="https://apps.apple.com/br/app/perfil-secreto-jogo-de-dicas/id6799121116">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+      Baixar grátis na App Store
+    </a>
+  </section>
+
+  <section class="jogo" data-id="6809085355">
+    <div class="topo">
+      <img class="icone" src="img/craquefoot.jpg" alt="">
+      <div>
+        <p class="nome">Craquefoot</p>
+        <p class="nota">★ <b>4,6</b> <span>· <i>12</i> avaliações</span></p>
+      </div>
+    </div>
+    <p class="sobre">Crie um jogador, herde atributos de lendas do futebol e comece na Série A ou na Série B. Daí em diante, cada partida é sua.</p>
+    <a class="baixar" href="https://apps.apple.com/br/app/craquefoot/id6809085355">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+      Baixar grátis na App Store
+    </a>
+  </section>
+
+  <footer><a href="https://www.instagram.com/eremita.jogos/">@eremita.jogos</a></footer>
+</main>
+
+<script>
+  // Nota e avaliações ao vivo da App Store (o HTML já traz os números de 20/10/2026, caso falhe).
+  window.notas = function (res) {
+    (res.results || []).forEach(function (app) {
+      var card = document.querySelector('.jogo[data-id="' + app.trackId + '"]');
+      if (!card || !app.userRatingCount) return;
+      card.querySelector('.nota b').textContent = app.averageUserRating.toFixed(1).replace('.', ',');
+      card.querySelector('.nota i').textContent = app.userRatingCount.toLocaleString('pt-BR');
+    });
+  };
+  var ids = Array.prototype.map.call(document.querySelectorAll('.jogo'), function (c) { return c.dataset.id; });
+  var s = document.createElement('script');
+  s.src = 'https://itunes.apple.com/lookup?country=br&id=' + ids.join(',') + '&callback=notas';
+  document.body.appendChild(s);
+</script>
+</body>
+</html>
