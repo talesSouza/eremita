@@ -128,6 +128,21 @@
     </a>
   </section>
 
+  <section class="jogo" data-id="6819165991">
+    <div class="topo">
+      <img class="icone" src="img/sintoniatotal.jpg" alt="">
+      <div>
+        <p class="nome">Sintonia Total</p>
+        <p class="nota"><span>Novo na App Store</span></p>
+      </div>
+    </div>
+    <p class="sobre">Uma frase, uma resposta e uma nota de 0 a 10 que só quem respondeu sabe. A mesa chuta a nota, e quem chega mais perto pontua.</p>
+    <a class="baixar" href="https://apps.apple.com/br/app/sintonia-total-qual-a-nota/id6819165991">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+      Baixar grátis na App Store
+    </a>
+  </section>
+
   <footer><a href="https://www.instagram.com/eremita.jogos/">@eremita.jogos</a></footer>
 </main>
 
@@ -154,8 +169,8 @@
     (res.results || []).forEach(function (app) {
       var card = document.querySelector('.jogo[data-id="' + app.trackId + '"]');
       if (!card || !app.userRatingCount) return;
-      card.querySelector('.nota b').textContent = app.averageUserRating.toFixed(1).replace('.', ',');
-      card.querySelector('.nota i').textContent = app.userRatingCount.toLocaleString('pt-BR');
+      card.querySelector('.nota').innerHTML = '★ <b>' + app.averageUserRating.toFixed(1).replace('.', ',') + '</b> <span>· <i>' +
+        app.userRatingCount.toLocaleString('pt-BR') + '</i> avaliações</span>';
     });
   };
   var ids = Array.prototype.map.call(document.querySelectorAll('.jogo'), function (c) { return c.dataset.id; });
