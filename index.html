@@ -47,16 +47,28 @@
     background: var(--cartao);
     border: 1px solid var(--borda);
     border-radius: 22px;
-    padding: 16px;
-    margin-bottom: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
   }
-  .topo { display: flex; gap: 14px; align-items: center; }
-  .icone { width: 72px; height: 72px; border-radius: 17px; flex: none; display: block; }
+  /* A arte do jogo (a imagem de busca da App Store, 3:2) no alto do cartão. */
+  .banner { position: relative; }
+  .banner img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
+  .novo {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--lanterna); color: #2A2100; font-weight: 900; font-size: 12px; letter-spacing: .06em;
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .corpo { padding: 0 16px 16px; }
+  /* O ícone sobe e encaixa na borda da arte. */
+  .topo { position: relative; display: flex; gap: 14px; align-items: flex-end; margin-top: -30px; }
+  .icone { width: 72px; height: 72px; border-radius: 17px; flex: none; display: block; box-shadow: 0 0 0 4px var(--cartao); }
   .nome { font-weight: 900; font-size: 21px; line-height: 1.15; }
   .nota { color: var(--lanterna); font-weight: 800; font-size: 14px; margin-top: 3px; }
   .nota span { color: var(--apagado); font-weight: 600; }
   .nota i { font-style: normal; }
-  .sobre { color: var(--creme); opacity: .86; font-weight: 600; font-size: 15px; line-height: 1.45; margin: 12px 0 14px; }
+  .sobre { color: var(--creme); opacity: .86; font-weight: 600; font-size: 15px; line-height: 1.45; margin: 12px 0; }
+  .fichas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; padding: 0; list-style: none; }
+  .fichas li { background: rgba(255, 255, 255, .08); color: var(--apagado); font-weight: 700; font-size: 13px; padding: 4px 10px; border-radius: 999px; }
   .baixar {
     display: flex; align-items: center; justify-content: center; gap: 10px;
     background: var(--manto); color: #fff; text-decoration: none;
@@ -83,64 +95,89 @@
     <p class="lema">Feito por dev solo, pra jogar com todo mundo :)</p>
   </header>
 
-  <section class="jogo" data-id="6468999579">
-    <div class="topo">
-      <img class="icone" src="img/supersenha.jpg" alt="">
-      <div>
-        <p class="nome">Super Senha</p>
-        <p class="nota">★ <b>4,9</b> <span>· <i>502</i> avaliações</span></p>
-      </div>
+  <section class="jogo" data-id="6819165991">
+    <div class="banner">
+      <img src="img/banner-sintoniatotal.jpg" width="960" height="640" alt="Uma comida nota ?, com a régua de 0 a 10 e o 7 escolhido">
+      <span class="novo">NOVO</span>
     </div>
-    <p class="sobre">Inspirado no famoso programa de TV, um dá a dica e o outro adivinha. Fácil de explicar, difícil de parar.</p>
-    <a class="baixar" href="https://apps.apple.com/br/app/super-senha-jogo-de-palavras/id6468999579">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-      Baixar grátis na App Store
-    </a>
+    <div class="corpo">
+      <div class="topo">
+        <img class="icone" src="img/sintoniatotal.jpg" alt="">
+        <div>
+          <p class="nome">Sintonia Total</p>
+          <p class="nota"><span>Novo na App Store</span></p>
+        </div>
+      </div>
+      <p class="sobre">Uma frase, uma resposta e uma nota de 0 a 10 que só quem respondeu sabe. A mesa chuta a nota, e quem chega mais perto pontua.</p>
+      <ul class="fichas"><li>2 a 12 pessoas</li><li>Em grupo ou em times</li></ul>
+      <a class="baixar" href="https://apps.apple.com/br/app/sintonia-total-qual-a-nota/id6819165991">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+        Baixar grátis na App Store
+      </a>
+    </div>
+  </section>
+
+  <section class="jogo" data-id="6468999579">
+    <div class="banner">
+      <img src="img/banner-supersenha.jpg" width="960" height="640" loading="lazy" alt="Card de palavras do Super Senha com 3 acertos">
+    </div>
+    <div class="corpo">
+      <div class="topo">
+        <img class="icone" src="img/supersenha.jpg" alt="">
+        <div>
+          <p class="nome">Super Senha</p>
+          <p class="nota">★ <b>4,9</b> <span>· <i>502</i> avaliações</span></p>
+        </div>
+      </div>
+      <p class="sobre">Inspirado no famoso programa de TV, um dá a dica e o outro adivinha. Fácil de explicar, difícil de parar.</p>
+      <ul class="fichas"><li>2 a 8 pessoas</li><li>Em duplas</li></ul>
+      <a class="baixar" href="https://apps.apple.com/br/app/super-senha-jogo-de-palavras/id6468999579">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+        Baixar grátis na App Store
+      </a>
+    </div>
   </section>
 
   <section class="jogo" data-id="6799121116">
-    <div class="topo">
-      <img class="icone" src="img/perfilsecreto.jpg" alt="">
-      <div>
-        <p class="nome">Perfil Secreto</p>
-        <p class="nota">★ <b>5,0</b> <span>· <i>12</i> avaliações</span></p>
-      </div>
+    <div class="banner">
+      <img src="img/banner-perfilsecreto.jpg" width="960" height="640" loading="lazy" alt="Letreiro PERFIL aceso em vermelho sobre as fichas de dica">
     </div>
-    <p class="sobre">Um segredo por carta. Dez dicas, da mais vaga à quase óbvia. Quem adivinha primeiro, com menos dicas, leva mais pontos.</p>
-    <a class="baixar" href="https://apps.apple.com/br/app/perfil-secreto-jogo-de-dicas/id6799121116">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-      Baixar grátis na App Store
-    </a>
+    <div class="corpo">
+      <div class="topo">
+        <img class="icone" src="img/perfilsecreto.jpg" alt="">
+        <div>
+          <p class="nome">Perfil Secreto</p>
+          <p class="nota">★ <b>5,0</b> <span>· <i>12</i> avaliações</span></p>
+        </div>
+      </div>
+      <p class="sobre">Um segredo por carta. Dez dicas, da mais vaga à quase óbvia. Quem adivinha primeiro, com menos dicas, leva mais pontos.</p>
+      <ul class="fichas"><li>2 ou mais pessoas</li><li>Um lê, a mesa chuta</li></ul>
+      <a class="baixar" href="https://apps.apple.com/br/app/perfil-secreto-jogo-de-dicas/id6799121116">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+        Baixar grátis na App Store
+      </a>
+    </div>
   </section>
 
   <section class="jogo" data-id="6809085355" data-play="https://play.google.com/store/apps/details?id=com.tales.craquefoot">
-    <div class="topo">
-      <img class="icone" src="img/craquefoot.jpg" alt="">
-      <div>
-        <p class="nome">Craquefoot</p>
-        <p class="nota">★ <b>4,6</b> <span>· <i>12</i> avaliações</span></p>
-      </div>
+    <div class="banner">
+      <img src="img/banner-craquefoot.jpg" width="960" height="640" loading="lazy" alt="Placar de 2 a 2 e a escolha de um lance cara a cara">
     </div>
-    <p class="sobre">Crie um jogador, herde atributos de lendas do futebol e comece na Série A ou na Série B. Daí em diante, cada partida é sua.</p>
-    <a class="baixar" href="https://apps.apple.com/br/app/craquefoot/id6809085355">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-      Baixar grátis na App Store
-    </a>
-  </section>
-
-  <section class="jogo" data-id="6819165991">
-    <div class="topo">
-      <img class="icone" src="img/sintoniatotal.jpg" alt="">
-      <div>
-        <p class="nome">Sintonia Total</p>
-        <p class="nota"><span>Novo na App Store</span></p>
+    <div class="corpo">
+      <div class="topo">
+        <img class="icone" src="img/craquefoot.jpg" alt="">
+        <div>
+          <p class="nome">Craquefoot</p>
+          <p class="nota">★ <b>4,6</b> <span>· <i>12</i> avaliações</span></p>
+        </div>
       </div>
+      <p class="sobre">Crie um jogador, herde atributos de lendas do futebol e comece na Série A ou na Série B. Daí em diante, cada partida é sua.</p>
+      <ul class="fichas"><li>Para jogar sozinho</li><li>Carreira no futebol</li></ul>
+      <a class="baixar" href="https://apps.apple.com/br/app/craquefoot/id6809085355">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+        Baixar grátis na App Store
+      </a>
     </div>
-    <p class="sobre">Uma frase, uma resposta e uma nota de 0 a 10 que só quem respondeu sabe. A mesa chuta a nota, e quem chega mais perto pontua.</p>
-    <a class="baixar" href="https://apps.apple.com/br/app/sintonia-total-qual-a-nota/id6819165991">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-      Baixar grátis na App Store
-    </a>
   </section>
 
   <footer><a href="https://www.instagram.com/eremita.jogos/">@eremita.jogos</a></footer>
