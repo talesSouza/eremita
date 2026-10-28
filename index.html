@@ -147,6 +147,15 @@
 </main>
 
 <script>
+  // Quem chega com ?de= (ex.: o convite da home do Super Senha, ?de=supersenha) leva a origem para a
+  // App Store como campanha: aparece no App Store Connect em Analytics → Fontes → Campanhas.
+  var origem = (new URLSearchParams(location.search).get('de') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+  if (origem) {
+    document.querySelectorAll('a[href^="https://apps.apple.com/"]').forEach(function (link) {
+      link.href += (link.href.indexOf('?') < 0 ? '?' : '&') + 'pt=126727673&ct=' + origem + '&mt=8';
+    });
+  }
+
   // No Android, o botão da App Store não serve: o Craquefoot vai para o Google Play e os outros avisam.
   if (/android/i.test(navigator.userAgent)) {
     var PLAY = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 1.8c-.3.3-.4.7-.4 1.2v18c0 .5.1.9.4 1.2l10-10.2-10-10.2zm11.2 9L5.3 1.2l11.9 6.8-2.4 2.8zm0 2.4l2.4 2.8-11.9 6.8 9.5-9.6zm3.6-4.4 2.7 1.6c.8.5.8 1.7 0 2.2l-2.7 1.6-2.7-2.7 2.7-2.7z"/></svg>';
