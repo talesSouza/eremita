@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Craquefoot</title>
+<meta name="description" content="Sua carreira no futebol. Grátis no iPhone e no Android.">
+<meta property="og:title" content="Craquefoot">
+<meta property="og:image" content="https://talessouza.github.io/eremita/img/banner-craquefoot.jpg">
+<meta name="robots" content="noindex">
+<link rel="icon" href="../../img/craquefoot.jpg">
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #231A4E; color: #FFF4E0; font-family: system-ui, sans-serif; text-align: center; }
+  main { padding: 24px 16px; }
+  img { width: 96px; height: 96px; border-radius: 22px; }
+  h1 { font-size: 20px; margin: 14px 0 6px; }
+  p { color: #B9B0DA; margin: 0 0 20px; }
+  a { display: inline-block; background: #FFD447; color: #231A4E; font-weight: 800; text-decoration: none; padding: 12px 22px; border-radius: 12px; margin: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <img src="../../img/craquefoot.jpg" alt="">
+  <h1>Craquefoot</h1>
+  <p>Abrindo a loja…</p>
+  <a id="ios" href="https://apps.apple.com/app/apple-store/id6809085355?pt=126727673&ct=craquefoot-reel&mt=8">App Store</a>
+  <a id="android" href="https://play.google.com/store/apps/details?id=com.tales.craquefoot&referrer=utm_source%3Dmeta%26utm_medium%3Dpaid%26utm_campaign%3Dcraquefoot-reel">Google Play</a>
+</main>
+<script>
+  // Android vai para o Play; o resto (iPhone, iPad) para a App Store.
+  location.replace(document.getElementById(/android/i.test(navigator.userAgent) ? 'android' : 'ios').href);
+</script>
+</body>
+</html>
