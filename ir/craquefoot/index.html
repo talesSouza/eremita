@@ -2,33 +2,78 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Craquefoot</title>
 <meta name="description" content="Sua carreira no futebol. Grátis no iPhone e no Android.">
 <meta property="og:title" content="Craquefoot">
+<meta property="og:description" content="Sua carreira no futebol. Grátis no iPhone e no Android.">
 <meta property="og:image" content="https://talessouza.github.io/eremita/img/banner-craquefoot.jpg">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#231A4E">
 <link rel="icon" href="../../img/craquefoot.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #231A4E; color: #FFF4E0; font-family: system-ui, sans-serif; text-align: center; }
-  main { padding: 24px 16px; }
-  img { width: 96px; height: 96px; border-radius: 22px; }
-  h1 { font-size: 20px; margin: 14px 0 6px; }
-  p { color: #B9B0DA; margin: 0 0 20px; }
-  a { display: inline-block; background: #FFD447; color: #231A4E; font-weight: 800; text-decoration: none; padding: 12px 22px; border-radius: 12px; margin: 4px; }
+  :root { --noite: #231A4E; --cartao: #2E2563; --borda: #3B3178; --manto: #F25C54; --lanterna: #FFD447; --creme: #FFF4E0; --apagado: #B9B0DA; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--noite); color: var(--creme); font-family: Nunito, system-ui, sans-serif; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+  main { max-width: 440px; margin: 0 auto; padding: 28px 16px 40px; }
+  .jogo { background: var(--cartao); border: 1px solid var(--borda); border-radius: 22px; overflow: hidden; }
+  .banner img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
+  .corpo { padding: 0 16px 16px; }
+  .topo { position: relative; display: flex; gap: 14px; align-items: flex-end; margin-top: -30px; }
+  .icone { width: 72px; height: 72px; border-radius: 17px; flex: none; display: block; box-shadow: 0 0 0 4px var(--cartao); }
+  .nome { font-weight: 900; font-size: 21px; line-height: 1.15; }
+  .nota { color: var(--lanterna); font-weight: 800; font-size: 14px; margin-top: 3px; }
+  .nota span { color: var(--apagado); font-weight: 600; }
+  .sobre { opacity: .86; font-weight: 600; font-size: 15px; line-height: 1.45; margin: 12px 0 16px; }
+  .baixar { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--manto); color: #fff; text-decoration: none; border-radius: 14px; padding: 13px 16px; font-weight: 800; font-size: 17px; }
+  .baixar + .baixar { margin-top: 8px; background: transparent; border: 1px solid var(--borda); color: var(--creme); }
+  .baixar svg { width: 20px; height: 20px; flex: none; }
+  .abrindo { display: flex; align-items: center; justify-content: center; gap: 8px; color: var(--apagado); font-weight: 700; font-size: 14px; margin-top: 14px; }
+  .abrindo::before { content: ""; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--borda); border-top-color: var(--lanterna); animation: gira .8s linear infinite; }
+  .abrindo[hidden] { display: none; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .abrindo::before { animation: none; } }
+  footer { text-align: center; margin-top: 22px; }
+  footer a { color: var(--apagado); font-weight: 700; font-size: 14px; text-decoration: none; }
 </style>
 </head>
 <body>
 <main>
-  <img src="../../img/craquefoot.jpg" alt="">
-  <h1>Craquefoot</h1>
-  <p>Abrindo a loja…</p>
-  <a id="ios" href="https://apps.apple.com/app/apple-store/id6809085355?pt=126727673&ct=craquefoot-reel&mt=8">App Store</a>
-  <a id="android" href="https://play.google.com/store/apps/details?id=com.tales.craquefoot&referrer=utm_source%3Dmeta%26utm_medium%3Dpaid%26utm_campaign%3Dcraquefoot-reel">Google Play</a>
+  <section class="jogo">
+    <div class="banner"><img src="../../img/banner-craquefoot.jpg" width="960" height="640" alt="Placar de 2 a 2 e a escolha de um lance cara a cara"></div>
+    <div class="corpo">
+      <div class="topo">
+        <img class="icone" src="../../img/craquefoot.jpg" alt="">
+        <div>
+          <p class="nome">Craquefoot</p>
+          <p class="nota">★ <b>4,6</b> <span>· grátis no iPhone e no Android</span></p>
+        </div>
+      </div>
+      <p class="sobre">Crie um jogador, herde atributos de lendas do futebol e comece na Série A ou na Série B. Daí em diante, cada partida é sua.</p>
+      <a class="baixar" id="ios" href="https://apps.apple.com/app/apple-store/id6809085355?pt=126727673&ct=craquefoot-reel&mt=8">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+        Baixar grátis na App Store
+      </a>
+      <a class="baixar" id="android" href="https://play.google.com/store/apps/details?id=com.tales.craquefoot&referrer=utm_source%3Dmeta%26utm_medium%3Dpaid%26utm_campaign%3Dcraquefoot-reel">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 1.8c-.3.3-.4.7-.4 1.2v18c0 .5.1.9.4 1.2l10-10.2-10-10.2zm11.2 9L5.3 1.2l11.9 6.8-2.4 2.8zm0 2.4l2.4 2.8-11.9 6.8 9.5-9.6zm3.6-4.4 2.7 1.6c.8.5.8 1.7 0 2.2l-2.7 1.6-2.7-2.7 2.7-2.7z"/></svg>
+        Baixar grátis no Google Play
+      </a>
+      <p class="abrindo" id="abrindo">Abrindo a loja…</p>
+    </div>
+  </section>
+  <footer><a href="../../">Mais jogos da Eremita</a></footer>
 </main>
 <script>
-  // Android vai para o Play; o resto (iPhone, iPad) para a App Store.
-  location.replace(document.getElementById(/android/i.test(navigator.userAgent) ? 'android' : 'ios').href);
+  // Página de passagem do anúncio: Android vai para o Google Play, o resto para a App Store, na hora.
+  // O botão do sistema da pessoa fica em cima. Com #ver no endereço, fica parada (para conferir o visual).
+  var android = /android/i.test(navigator.userAgent);
+  var loja = document.getElementById(android ? 'android' : 'ios');
+  loja.parentNode.insertBefore(loja, loja.parentNode.querySelector('.baixar'));
+  if (location.hash !== '#ver') location.replace(loja.href);
+  else document.getElementById('abrindo').hidden = true;
 </script>
 </body>
 </html>
