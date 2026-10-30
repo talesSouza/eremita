@@ -279,6 +279,17 @@
     document.querySelectorAll('a[href^="https://apps.apple.com/"]').forEach(function (link) {
       link.href += (link.href.indexOf('?') < 0 ? '?' : '&') + 'pt=126727673&ct=' + origem + '&mt=8';
     });
+
+    // Conta quem chegou por ali e quem tocou em qual jogo, por dia de Brasília, num contador sem cadastro
+    // (abacus). Lê com ~/.appstoreconnect/convite.py, junto dos downloads da campanha.
+    var dia = new Date(Date.now() - 3 * 36e5).toISOString().slice(0, 10);
+    var contar = function (nome) {
+      try { fetch('https://abacus.jasoncameron.dev/hit/eremita/' + origem + '-' + dia + '-' + nome, { keepalive: true }); } catch (e) {}
+    };
+    contar('visita');
+    document.querySelectorAll('.jogo .baixar').forEach(function (botao) {
+      botao.addEventListener('click', function () { contar(botao.closest('.jogo').dataset.id); });
+    });
   }
 
   // No Android, o botão da App Store não serve: o Craquefoot vai para o Google Play e os outros avisam.
