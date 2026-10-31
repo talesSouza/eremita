@@ -276,6 +276,11 @@
   // App Store como campanha: aparece no App Store Connect em Analytics → Fontes → Campanhas.
   var origem = (new URLSearchParams(location.search).get('de') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
   if (origem) {
+    // Não oferece o jogo de onde a pessoa veio: ela já tem.
+    var DE = { supersenha: '6468999579', perfil: '6799121116' };
+    var proprio = DE[origem] && document.querySelector('.jogo[data-id="' + DE[origem] + '"]');
+    if (proprio) proprio.remove();
+
     document.querySelectorAll('a[href^="https://apps.apple.com/"]').forEach(function (link) {
       link.href += (link.href.indexOf('?') < 0 ? '?' : '&') + 'pt=126727673&ct=' + origem + '&mt=8';
     });
