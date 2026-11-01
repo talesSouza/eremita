@@ -130,7 +130,7 @@
   @keyframes enche { to { transform: scaleX(1); } }
   @property --luz-x { syntax: '<length>'; inherits: true; initial-value: 50%; }
   .luz {
-    position: absolute; top: 40px; left: 0; right: 0; height: 104px; pointer-events: none; overflow: hidden;
+    position: absolute; top: 40px; left: -16px; right: -16px; height: 104px; pointer-events: none; overflow: hidden;
     background: linear-gradient(rgba(255, 212, 71, .34), rgba(255, 212, 71, .04));
     clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
     animation: acende .9s steps(1) .75s both, chama 2.6s ease-in-out 1.7s infinite;
@@ -458,15 +458,16 @@
     var icones = Array.prototype.slice.call(nav.querySelectorAll('.ic'));
     var atual = null, timer = null;
     var cartao = function (id) { return palco.querySelector('.jogo[data-id="' + id + '"]'); };
-    // O facho sai do ícone e abre numa base de 150 px que nunca passa da borda do cartão: nos ícones
-    // dos cantos ele inclina para dentro, como a lanterna apontando para o cartão.
+    // O facho sai do ícone e abre numa base de 190 px que pode passar só um pouco da borda do cartão
+    // (o facho é 16 px mais largo que a fila de cada lado): nos ícones dos cantos ele inclina de leve
+    // para dentro, sem fechar.
     var mira = function () {
       var b = nav.querySelector('.ic.on');
       if (!b) return;
-      var w = nav.offsetWidth, x = b.offsetLeft + b.offsetWidth / 2, base = 150;
-      var esq = Math.max(6, Math.min(w - 6 - base, x - base / 2));
-      luz.style.clipPath = 'polygon(' + (x - 9) + 'px 0,' + (x + 9) + 'px 0,' + (esq + base) + 'px 100%,' + esq + 'px 100%)';
-      palco.style.setProperty('--luz-x', (esq + base / 2) + 'px');
+      var w = luz.offsetWidth, x = b.offsetLeft + b.offsetWidth / 2 + 16, base = 190;
+      var esq = Math.max(0, Math.min(w - base, x - base / 2));
+      luz.style.clipPath = 'polygon(' + (x - 10) + 'px 0,' + (x + 10) + 'px 0,' + (esq + base) + 'px 100%,' + esq + 'px 100%)';
+      palco.style.setProperty('--luz-x', (esq + base / 2 - 16) + 'px');
     };
     function mostra(botao, anima) {
       if (botao === atual) return;
