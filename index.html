@@ -56,6 +56,12 @@
     animation: brilha 5.2s ease-in-out -2s infinite alternate;
   }
   @keyframes brilha { from { opacity: .35; } to { opacity: 1; } }
+  /* O céu pela hora de Brasília: de dia as estrelas quase somem; no amanhecer e no entardecer o pé da
+     tela esquenta. */
+  [data-ceu="dia"] body::before, [data-ceu="dia"] body::after { animation-name: brilha-dia; }
+  @keyframes brilha-dia { from { opacity: .08; } to { opacity: .3; } }
+  [data-ceu="dia"] body { background: linear-gradient(#33287A, var(--noite) 70%) fixed; }
+  [data-ceu="amanhecer"] body, [data-ceu="entardecer"] body { background: linear-gradient(var(--noite) 50%, #4A2A63 80%, #8C4560) fixed; }
 
   /* A abertura: o cabeçalho, os ícones um a um, a lanterna acendendo e o cartão subindo. */
   header, .lema { animation: chega .5s cubic-bezier(.2, .8, .3, 1) both; }
@@ -106,7 +112,22 @@
     position: absolute; left: 0; top: 0; z-index: 3; width: 40px; height: 48px; visibility: hidden;
     transform-origin: 20px 24px; animation: surge .5s ease both; pointer-events: none;
   }
-  .andarilho.pronto { visibility: visible; }
+  .andarilho.pronto { visibility: visible; pointer-events: auto; cursor: pointer; }
+  .andarilho svg { transition: transform .6s ease; transform-origin: 50% 100%; }
+  .andarilho.dorme svg { transform: translateY(3px) scaleY(.9); }
+  .andarilho.dorme .er-corpo { animation: ronca 2.6s ease-in-out infinite; }
+  .andarilho.dorme .er-lanterna { animation: none; transform: rotate(18deg); }
+  @keyframes ronca { 50% { transform: translateY(2px) rotate(-3deg); } }
+  .luz.fraca, .palco.fraca::after, .andarilho.dorme .brilho { animation: none !important; opacity: .16; transition: opacity 1s ease; }
+  /* Os zzz subindo da cabeça e o "!" do susto. */
+  .bolha { position: absolute; z-index: 4; pointer-events: none; font-weight: 900; font-size: 11px; color: var(--creme); }
+  .bolha i { position: absolute; left: 0; bottom: 0; font-style: normal; opacity: 0; animation: zzz 2.4s ease-out infinite; }
+  .bolha i:nth-child(2) { animation-delay: .8s; font-size: 13px; }
+  .bolha i:nth-child(3) { animation-delay: 1.6s; font-size: 16px; }
+  @keyframes zzz { 0% { opacity: 0; transform: translate(0, 0); } 20% { opacity: .9; } 100% { opacity: 0; transform: translate(14px, -30px); } }
+  .bolha.susto i { animation: susto .7s ease-out both; font-size: 18px; color: var(--lanterna); }
+  .bolha.susto i + i { display: none; }
+  @keyframes susto { 0% { opacity: 0; transform: scale(.4); } 25% { opacity: 1; transform: translateY(-8px) scale(1.2); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-12px); } }
   .andarilho svg { display: block; width: 100%; height: 100%; overflow: visible; }
   .andarilho:not(.anda) .er-corpo, .andarilho:not(.anda) .er-pe, .andarilho:not(.anda) .er-sombra { animation: none; }
   .andarilho.anda .er-corpo, .andarilho.anda .er-pe { animation-duration: .5s; }
@@ -235,6 +256,33 @@
   }
   .baixar:active { transform: scale(.97); }
   .baixar svg { width: 20px; height: 20px; flex: none; }
+  /* As avaliações de verdade, uma por vez, trocando devagar. */
+  .opinioes { margin: 14px 0 0; padding: 12px 14px 10px; border-radius: 14px; background: rgba(255, 255, 255, .05); display: grid; }
+  .opinioes blockquote {
+    grid-area: 1 / 1; margin: 0; font-weight: 700; font-size: 14.5px; line-height: 1.4; color: var(--creme);
+    opacity: 0; transform: translateY(6px); transition: opacity .5s ease, transform .5s ease;
+  }
+  .opinioes blockquote.on { opacity: .92; transform: none; }
+  .opinioes figcaption { margin-top: 8px; color: var(--apagado); font-weight: 700; font-size: 12px; }
+  .opinioes figcaption span { color: var(--lanterna); letter-spacing: 1px; margin-right: 4px; }
+
+  /* As telas da App Store numa fila de arrastar; tocar abre grande. */
+  .telas {
+    display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 16px;
+    margin: 16px -16px 0; padding: 0 16px 2px; scrollbar-width: none;
+  }
+  .telas::-webkit-scrollbar { display: none; }
+  .tela { flex: none; padding: 0; border: 0; background: none; cursor: zoom-in; scroll-snap-align: start; border-radius: 14px; }
+  .tela img { display: block; height: 240px; width: auto; border-radius: 14px; background: rgba(255, 255, 255, .06); }
+  .tela-grande {
+    position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 24px 16px;
+    background: rgba(18, 13, 43, .92); cursor: zoom-out; animation: aparece-so .2s ease both;
+  }
+  .tela-grande[hidden] { display: none; }
+  .tela-grande img { max-width: 100%; max-height: calc(100vh - 48px); max-height: calc(100dvh - 48px); border-radius: 18px; box-shadow: 0 20px 60px rgba(0, 0, 0, .5); animation: cresce .25s cubic-bezier(.2, .8, .3, 1.1) both; }
+  @keyframes aparece-so { from { opacity: 0; } }
+  @keyframes cresce { from { transform: scale(.9); } }
+
   .so-iphone {
     text-align: center; color: var(--apagado); font-weight: 700; font-size: 15px;
     border: 1px dashed var(--borda); border-radius: 14px; padding: 13px 16px;
@@ -278,6 +326,7 @@
 
   <nav class="icones" aria-label="Jogos">
     <!-- O eremita redesenhado em vetor (mesmas cores e proporções de img/eremita.jpg), recortado na figura. -->
+    <div class="bolha" hidden><i>z</i><i>z</i><i>z</i></div>
     <div class="andarilho" role="img" aria-label="O eremita da Eremita Jogos, de manto vermelho, levando a lanterna até o jogo">
       <span class="brilho"></span>
       <svg viewBox="60 40 150 180">
@@ -329,6 +378,20 @@
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
           Baixar grátis na App Store
         </a>
+        <figure class="opinioes">
+          <blockquote class="on">“Você retomou toda a minha infância em um aplicativo lindo, simples e extremamente bom!”</blockquote>
+          <blockquote>“Recomendo esse jogo pra jogar em grupo com vários amigos! É suuuper divertido 🙏🏼”</blockquote>
+          <blockquote>“Dá pra ver que esse jogo foi muito bem pensado e construído. Parabéns ao desenvolvedor!”</blockquote>
+          <blockquote>“Fácil de jogar pq só precisa de 1 cel pra várias pessoas &lt;3”</blockquote>
+          <blockquote>“Um dos melhores jogos para fazer com a família”</blockquote>
+          <figcaption><span>★★★★★</span> avaliação na App Store</figcaption>
+        </figure>
+        <div class="telas" aria-label="Telas do Super Senha">
+          <button class="tela" type="button"><img src="img/telas/supersenha-1.jpg" loading="lazy" alt="Tela 1 do Super Senha na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/supersenha-2.jpg" loading="lazy" alt="Tela 2 do Super Senha na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/supersenha-3.jpg" loading="lazy" alt="Tela 3 do Super Senha na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/supersenha-4.jpg" loading="lazy" alt="Tela 4 do Super Senha na App Store"></button>
+        </div>
       </div>
     </section>
 
@@ -350,6 +413,19 @@
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
           Baixar grátis na App Store
         </a>
+        <figure class="opinioes">
+          <blockquote class="on">“Além de ser muito legal de jogar em grupo o app é muito bonito 👏”</blockquote>
+          <blockquote>“Eu amo esse jogo, meu preferido. Ficou mto massa!”</blockquote>
+          <blockquote>“Eu e meus amigos nos divertimos muito!”</blockquote>
+          <figcaption><span>★★★★★</span> avaliação na App Store</figcaption>
+        </figure>
+        <div class="telas" aria-label="Telas do Perfil Secreto">
+          <button class="tela" type="button"><img src="img/telas/perfilsecreto-1.jpg" loading="lazy" alt="Tela 1 do Perfil Secreto na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/perfilsecreto-2.jpg" loading="lazy" alt="Tela 2 do Perfil Secreto na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/perfilsecreto-3.jpg" loading="lazy" alt="Tela 3 do Perfil Secreto na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/perfilsecreto-4.jpg" loading="lazy" alt="Tela 4 do Perfil Secreto na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/perfilsecreto-5.jpg" loading="lazy" alt="Tela 5 do Perfil Secreto na App Store"></button>
+        </div>
       </div>
     </section>
 
@@ -372,6 +448,20 @@
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
           Baixar grátis na App Store
         </a>
+        <figure class="opinioes">
+          <blockquote class="on">“Acho que foi o app mais bonito que baixei esse ano, além do jogo ser muito divertido!”</blockquote>
+          <blockquote>“Gostei muito da introdução e a dinâmica é divertida!”</blockquote>
+          <figcaption><span>★★★★★</span> avaliação na App Store</figcaption>
+        </figure>
+        <div class="telas" aria-label="Telas do Censurado!">
+          <button class="tela" type="button"><img src="img/telas/censurado-1.jpg" loading="lazy" alt="Tela 1 do Censurado! na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/censurado-2.jpg" loading="lazy" alt="Tela 2 do Censurado! na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/censurado-3.jpg" loading="lazy" alt="Tela 3 do Censurado! na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/censurado-4.jpg" loading="lazy" alt="Tela 4 do Censurado! na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/censurado-5.jpg" loading="lazy" alt="Tela 5 do Censurado! na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/censurado-6.jpg" loading="lazy" alt="Tela 6 do Censurado! na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/censurado-7.jpg" loading="lazy" alt="Tela 7 do Censurado! na App Store"></button>
+        </div>
       </div>
     </section>
 
@@ -394,6 +484,12 @@
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
           Baixar grátis na App Store
         </a>
+        <div class="telas" aria-label="Telas do Sintonia Total">
+          <button class="tela" type="button"><img src="img/telas/sintoniatotal-1.jpg" loading="lazy" alt="Tela 1 do Sintonia Total na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/sintoniatotal-2.jpg" loading="lazy" alt="Tela 2 do Sintonia Total na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/sintoniatotal-3.jpg" loading="lazy" alt="Tela 3 do Sintonia Total na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/sintoniatotal-4.jpg" loading="lazy" alt="Tela 4 do Sintonia Total na App Store"></button>
+        </div>
       </div>
     </section>
 
@@ -415,14 +511,33 @@
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
           Baixar grátis na App Store
         </a>
+        <figure class="opinioes">
+          <blockquote class="on">“Absolutamente viciante! Mistura a nostalgia do Brasfoot com a dinâmica de carreira do FIFA, não dá pra parar de jogar. Baita jogo!”</blockquote>
+          <blockquote>“Vicia porque tem muitas opções para desenvolvimento do jogador, difícil parar de jogar. Muito bom, nota 10”</blockquote>
+          <figcaption><span>★★★★★</span> avaliação na App Store</figcaption>
+        </figure>
+        <div class="telas" aria-label="Telas do Craquefoot">
+          <button class="tela" type="button"><img src="img/telas/craquefoot-1.jpg" loading="lazy" alt="Tela 1 do Craquefoot na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/craquefoot-2.jpg" loading="lazy" alt="Tela 2 do Craquefoot na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/craquefoot-3.jpg" loading="lazy" alt="Tela 3 do Craquefoot na App Store"></button>
+          <button class="tela" type="button"><img src="img/telas/craquefoot-4.jpg" loading="lazy" alt="Tela 4 do Craquefoot na App Store"></button>
+        </div>
       </div>
     </section>
   </div>
+
+  <div class="tela-grande" hidden></div>
 
   <footer><a href="https://www.instagram.com/eremita.jogos/">@eremita.jogos</a></footer>
 </main>
 
 <script>
+  // O céu acompanha a hora de Brasília.
+  (function () {
+    var h = new Date(Date.now() - 3 * 36e5).getUTCHours();
+    document.documentElement.dataset.ceu = h >= 5 && h < 8 ? 'amanhecer' : h >= 8 && h < 17 ? 'dia' : h >= 17 && h < 19 ? 'entardecer' : 'noite';
+  })();
+
   // Quem chega com ?de= (ex.: o convite da home do Super Senha, ?de=supersenha) leva a origem para a
   // App Store como campanha: aparece no App Store Connect em Analytics → Fontes → Campanhas.
   var origem = (new URLSearchParams(location.search).get('de') || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
@@ -492,6 +607,7 @@
     var icones = Array.prototype.slice.call(nav.querySelectorAll('.ic'));
     var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
     var atual = null, timer = null, passo = 0, abertura = true, pulou = false, mexeu = false;
+    var bolha = nav.querySelector('.bolha'), sonoT = null, dormindo = false, voltas = 0;
     var cartao = function (id) { return palco.querySelector('.jogo[data-id="' + id + '"]'); };
 
     // O eremita: x é a esquerda dele na fila (40 px de largura), vira para onde anda. A lanterna fica a
@@ -516,13 +632,14 @@
     }
     var mede = function () { luz.style.height = (palco.offsetTop - nav.offsetTop - 15) + 'px'; };
     var suave = function (t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
-    // Anda (ou pula, com `arco`) até `alvo`, de frente para onde vai, e no fim vira para `lado`.
+    // Anda (ou pula, com `arco` = altura do pulo em px) até `alvo`, de frente para onde vai, e no fim
+    // vira para `lado`.
     function anda(alvo, lado, arco, pronto) {
       var de = { x: er.x, y: er.y }, dist = Math.abs(alvo - de.x), meu = ++passo;
       if (calmo || (dist < 1 && !arco)) { er.x = alvo; er.y = 0; er.lado = lado; poe(); if (pronto) pronto(); return; }
       // O relógio começa no primeiro quadro desenhado: com a página ainda escondida, o navegador segura
       // os quadros e, contando do momento da chamada, ele apareceria já pousado.
-      var dur = arco ? 850 : Math.min(1100, Math.max(350, dist * 5)), t0 = null;
+      var dur = arco ? (arco > 30 ? 850 : 420) : Math.min(1100, Math.max(350, dist * 5)), t0 = null;
       if (dist >= 1) er.lado = alvo > de.x ? 1 : -1;
       eremita.classList.add('anda');
       requestAnimationFrame(function quadro(agora) {
@@ -530,7 +647,7 @@
         if (t0 === null) t0 = agora;
         var t = Math.min(1, (agora - t0) / dur), e = suave(t);
         er.x = de.x + (alvo - de.x) * (arco ? t : e);
-        er.y = arco ? de.y * (1 - t * t) - 48 * Math.sin(Math.PI * t) : 0;
+        er.y = arco ? de.y * (1 - t * t) - arco * Math.sin(Math.PI * t) : 0;
         poe();
         if (t < 1) return requestAnimationFrame(quadro);
         eremita.classList.remove('anda');
@@ -580,16 +697,65 @@
       if (!timer) return;
       clearInterval(timer); timer = null;
       nav.classList.add('parado');
+      cochila();
     }
     var vizinho = function (d) { return icones[(icones.indexOf(atual) + d + icones.length) % icones.length]; };
     function acende() {
       [luz, palco, eremita].forEach(function (el) { el.classList.add('acesa'); });
       abertura = false;
-      if (calmo || mexeu) return;
+      if (calmo || mexeu) return cochila();
       nav.classList.remove('parado');
       var pr = atual.querySelector('.prog'); pr.classList.remove('roda'); void pr.offsetWidth; pr.classList.add('roda');
-      timer = setInterval(function () { mostra(vizinho(1), true); }, 4500);
+      // A vitrine dá uma volta sozinha e para no primeiro jogo.
+      timer = setInterval(function () {
+        mostra(vizinho(1), true);
+        if (++voltas < icones.length) return;
+        clearInterval(timer); timer = null;
+        nav.classList.add('parado');
+        cochila();
+      }, 4500);
     }
+
+    // Parado e sem ninguém mexer por 8 s, ele senta, a lanterna fica fraquinha e sobem os zzz. Qualquer
+    // toque, rolagem ou tecla acorda ele num susto, com um pulinho e a lanterna acendendo de novo.
+    function cochila() {
+      clearTimeout(sonoT);
+      if (calmo || abertura || timer || dormindo) return;
+      sonoT = setTimeout(dorme, 8000);
+    }
+    function bolhaNaCabeca(susto) {
+      bolha.classList.toggle('susto', !!susto);
+      bolha.querySelector('i').textContent = susto ? '!' : 'z';
+      bolha.style.left = (er.x + (er.lado > 0 ? 18 : 10)) + 'px';
+      bolha.style.top = (er.y + 6) + 'px';
+      bolha.hidden = false;
+    }
+    function dorme() {
+      if (eremita.classList.contains('anda')) return cochila();
+      dormindo = true;
+      eremita.classList.add('dorme');
+      luz.classList.add('fraca'); palco.classList.add('fraca');
+      bolhaNaCabeca(false);
+    }
+    function acorda() {
+      dormindo = false;
+      eremita.classList.remove('dorme');
+      luz.classList.remove('fraca'); palco.classList.remove('fraca');
+      bolhaNaCabeca(true);
+      var b = bolha.querySelector('i'); b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
+      setTimeout(function () { if (!dormindo) bolha.hidden = true; }, 700);
+      anda(er.x, er.lado, 18);
+      [luz, palco, eremita].forEach(function (el) { el.classList.remove('acesa'); void el.offsetWidth; el.classList.add('acesa'); });
+    }
+    var mexendo = function () { if (dormindo) acorda(); cochila(); };
+    ['pointerdown', 'keydown'].forEach(function (ev) { addEventListener(ev, mexendo); });
+    addEventListener('scroll', mexendo, { passive: true });
+    // Tocar nele: um pulinho (se estiver cochilando, o toque só acorda).
+    var acordou = false;
+    eremita.addEventListener('pointerdown', function () { acordou = dormindo; });
+    eremita.addEventListener('click', function () {
+      if (!acordou && !abertura && !eremita.classList.contains('anda')) anda(er.x, er.lado, 26);
+    });
 
     nav.classList.add('parado');
     mostra(icones[0], false);
@@ -616,7 +782,7 @@
       // O pulo só começa com a página na tela, um instante depois dos ícones chegarem.
       var pula = function () {
         if (document.hidden) return document.addEventListener('visibilitychange', pula, { once: true });
-        setTimeout(function () { noDisco(); pulou = true; var p = parada(atual); anda(p.x, p.lado, true, chega); }, 950);
+        setTimeout(function () { noDisco(); pulou = true; var p = parada(atual); anda(p.x, p.lado, 48, chega); }, 950);
       };
       pula();
     }
@@ -629,7 +795,25 @@
     });
     // Arrastar o cartão para o lado troca de jogo.
     var toque = null;
-    palco.addEventListener('pointerdown', function (e) { para(); toque = { x: e.clientX, y: e.clientY }; });
+    // O arrasto do cartão não vale dentro da fila de telas; tocar numa tela abre grande.
+    palco.addEventListener('pointerdown', function (e) { para(); toque = e.target.closest('.telas') ? null : { x: e.clientX, y: e.clientY }; });
+    var grande = document.querySelector('.tela-grande');
+    palco.addEventListener('click', function (e) {
+      var t = e.target.closest('.tela');
+      if (!t) return;
+      var img = t.querySelector('img');
+      grande.innerHTML = '<img src="' + img.src + '" alt="' + img.alt + '">';
+      grande.hidden = false;
+    });
+    grande.addEventListener('click', function () { grande.hidden = true; });
+    addEventListener('keydown', function (e) { if (e.key === 'Escape') grande.hidden = true; });
+    // As avaliações trocam a cada 5 s no cartão à mostra.
+    if (!calmo) setInterval(function () {
+      var f = palco.querySelector('.jogo.on .opinioes');
+      if (!f) return;
+      var qs = f.querySelectorAll('blockquote'), i = Array.prototype.findIndex.call(qs, function (q) { return q.classList.contains('on'); });
+      qs[i].classList.remove('on'); qs[(i + 1) % qs.length].classList.add('on');
+    }, 5000);
     palco.addEventListener('pointerup', function (e) {
       if (!toque) return;
       var dx = e.clientX - toque.x, dy = e.clientY - toque.y;
