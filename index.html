@@ -33,6 +33,41 @@
   }
   main { max-width: 440px; margin: 0 auto; padding: 24px 16px 40px; }
 
+  /* O céu do eremita: duas camadas de estrelinhas piscando em ritmos diferentes, e o calor da lanterna
+     atrás do cabeçalho. */
+  body::before, body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1; }
+  body::before {
+    background:
+      radial-gradient(1.4px 1.4px at 24px 40px, rgba(255, 244, 224, .8), transparent),
+      radial-gradient(1px 1px at 130px 90px, rgba(255, 244, 224, .6), transparent),
+      radial-gradient(1.2px 1.2px at 200px 20px, rgba(201, 163, 106, .9), transparent),
+      radial-gradient(1px 1px at 80px 170px, rgba(255, 244, 224, .5), transparent);
+    background-size: 240px 210px;
+    animation: brilha 3.6s ease-in-out infinite alternate;
+  }
+  body::after {
+    background:
+      radial-gradient(1.2px 1.2px at 60px 120px, rgba(255, 244, 224, .7), transparent),
+      radial-gradient(1.6px 1.6px at 170px 60px, rgba(201, 163, 106, .8), transparent),
+      radial-gradient(1px 1px at 120px 180px, rgba(255, 244, 224, .5), transparent),
+      radial-gradient(ellipse 340px 260px at 15% 0, rgba(255, 212, 71, .1), transparent);
+    background-size: 310px 250px, 310px 250px, 310px 250px, 100% 100%;
+    background-repeat: repeat, repeat, repeat, no-repeat;
+    animation: brilha 5.2s ease-in-out -2s infinite alternate;
+  }
+  @keyframes brilha { from { opacity: .35; } to { opacity: 1; } }
+
+  /* A abertura: o cabeçalho, os ícones um a um, a lanterna acendendo e o cartão subindo. */
+  header, .lema { animation: chega .5s cubic-bezier(.2, .8, .3, 1) both; }
+  .lema { animation-delay: .08s; }
+  .ic { animation: salta .45s cubic-bezier(.3, 1.4, .5, 1) both; }
+  .ic:nth-of-type(1) { animation-delay: .15s; } .ic:nth-of-type(2) { animation-delay: .22s; }
+  .ic:nth-of-type(3) { animation-delay: .29s; } .ic:nth-of-type(4) { animation-delay: .36s; }
+  .ic:nth-of-type(5) { animation-delay: .43s; }
+  .palco { animation: chega .55s cubic-bezier(.2, .8, .3, 1) .5s both; }
+  @keyframes chega { from { opacity: 0; transform: translateY(14px); } }
+  @keyframes salta { from { opacity: 0; transform: translateY(12px) scale(.7); } }
+
   /* O cabeçalho em linha, para os ícones de todos os jogos caberem na primeira tela. */
   header { display: flex; align-items: center; gap: 14px; }
   .avatar { position: relative; width: 68px; height: 68px; flex: none; }
@@ -85,22 +120,39 @@
     transition: transform .4s cubic-bezier(.3, 1.4, .5, 1), box-shadow .3s;
   }
   .ic.on { color: var(--creme); font-weight: 800; }
-  .ic.on img { transform: translateY(-5px) scale(1.1); box-shadow: 0 0 0 3px var(--lanterna), 0 8px 24px rgba(255, 212, 71, .35); }
+  .ic.on img { transform: translateY(-5px) scale(1.1); box-shadow: 0 0 0 3px var(--lanterna), 0 8px 24px rgba(255, 212, 71, .35); animation: respira 2.4s ease-in-out infinite; }
+  @keyframes respira { 50% { box-shadow: 0 0 0 3px var(--lanterna), 0 8px 34px rgba(255, 212, 71, .6); } }
   .prog { position: absolute; left: 14px; right: 14px; bottom: -9px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .1); overflow: hidden; opacity: 0; }
   .prog::after { content: ""; position: absolute; inset: 0; background: var(--lanterna); transform-origin: left; transform: scaleX(0); }
   .ic.on .prog { opacity: 1; }
   .ic.on .prog.roda::after { animation: enche 4.5s linear both; }
   .parado .prog { display: none; }
   @keyframes enche { to { transform: scaleX(1); } }
+  @property --luz-x { syntax: '<length>'; inherits: true; initial-value: 50%; }
   .luz {
-    position: absolute; top: 40px; left: 0; width: 160px; height: 100px; pointer-events: none;
-    background: linear-gradient(rgba(255, 212, 71, .32), rgba(255, 212, 71, 0));
-    clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+    position: absolute; top: 40px; left: 0; right: 0; height: 104px; pointer-events: none; overflow: hidden;
+    background: linear-gradient(rgba(255, 212, 71, .34), rgba(255, 212, 71, .04));
+    clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%);
+    animation: acende .9s steps(1) .75s both, chama 2.6s ease-in-out 1.7s infinite;
   }
-  .luz.anda { transition: transform .45s cubic-bezier(.3, 1.2, .5, 1); }
+  .luz.anda { transition: clip-path .5s cubic-bezier(.3, 1.2, .5, 1); }
+  .luz i { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #FFE9A8; animation: poeira 6s ease-in-out infinite; }
+  @keyframes poeira {
+    0%, 100% { transform: translate(0, 0); opacity: 0; }
+    20%, 80% { opacity: .9; }
+    50% { transform: translate(10px, -26px); }
+  }
+  @keyframes acende { 0% { opacity: 0; } 20% { opacity: .7; } 35% { opacity: .15; } 55% { opacity: 1; } 70% { opacity: .5; } 85%, 100% { opacity: 1; } }
+  @keyframes chama { 0%, 100% { opacity: 1; } 30% { opacity: .82; } 45% { opacity: .95; } 70% { opacity: .78; } }
 
   /* O cartão do jogo escolhido. Na troca, o novo aparece por cima do anterior (que sai de baixo). */
-  .palco { position: relative; margin-top: 16px; }
+  .palco { position: relative; margin-top: 16px; transition: --luz-x .5s cubic-bezier(.3, 1.2, .5, 1); }
+  .palco::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 150px; z-index: 2; pointer-events: none;
+    border-radius: 22px 22px 0 0; mix-blend-mode: screen;
+    background: radial-gradient(ellipse 130px 80px at var(--luz-x) 0, rgba(255, 212, 71, .26), transparent);
+    animation: acende .9s steps(1) .75s both, chama 2.6s ease-in-out 1.7s infinite;
+  }
   .jogo {
     display: none;
     background: var(--cartao);
@@ -110,16 +162,28 @@
   }
   .jogo.on { display: block; position: relative; z-index: 1; }
   .jogo.saindo { display: block; position: absolute; top: 0; left: 0; right: 0; }
-  .jogo.entra { animation: aparece .35s ease both; }
+  .jogo.entra { animation: aparece .4s cubic-bezier(.2, .8, .3, 1) both; }
+  .jogo.entra.da-esquerda { animation-name: aparece-esq; }
   .jogo.entra .banner img { animation: assenta .45s ease both; }
   .jogo.entra .corpo > * { animation: sobe .35s cubic-bezier(.2, .8, .3, 1) both; }
   .jogo.entra .corpo > :nth-child(2) { animation-delay: .04s; }
   .jogo.entra .corpo > :nth-child(3) { animation-delay: .08s; }
   .jogo.entra .corpo > :nth-child(4) { animation-delay: .12s; }
-  @keyframes aparece { from { opacity: 0; } }
+  @keyframes aparece { from { opacity: 0; transform: translateX(22px); } }
+  @keyframes aparece-esq { from { opacity: 0; transform: translateX(-22px); } }
+  .jogo.on .baixar { position: relative; overflow: hidden; }
+  .jogo.on .baixar::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%;
+    background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .28), transparent);
+    animation: reflexo 4.5s ease-in-out 1.6s infinite;
+  }
+  @keyframes reflexo { 0% { transform: translateX(0); } 30%, 100% { transform: translateX(400%); } }
   @keyframes assenta { from { transform: scale(1.04); } }
   @keyframes sobe { from { opacity: 0; transform: translateY(10px); } }
-  @media (prefers-reduced-motion: reduce) { .jogo.entra, .jogo.entra *, .ic img, .luz.anda { animation: none !important; transition: none !important; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .avatar svg * { animation: none !important; }
+  }
   /* A arte do jogo (a imagem de busca da App Store, 3:2) no alto do cartão. */
   .banner { position: relative; }
   .banner img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
@@ -208,7 +272,7 @@
   <p class="lema">Feito por dev solo, pra jogar com todo mundo :)</p>
 
   <nav class="icones" aria-label="Jogos">
-    <div class="luz"></div>
+    <div class="luz"><i style="left:12%;top:60%"></i><i style="left:27%;top:30%;animation-delay:-1.5s"></i><i style="left:38%;top:75%;animation-delay:-3s"></i><i style="left:46%;top:45%;animation-delay:-4.2s"></i><i style="left:55%;top:65%;animation-delay:-.8s"></i><i style="left:63%;top:25%;animation-delay:-2.4s"></i><i style="left:72%;top:55%;animation-delay:-5s"></i><i style="left:84%;top:40%;animation-delay:-3.6s"></i><i style="left:92%;top:70%;animation-delay:-1s"></i><i style="left:20%;top:85%;animation-delay:-4.6s"></i><i style="left:78%;top:85%;animation-delay:-2s"></i></div>
     <button class="ic" data-id="6468999579" aria-pressed="false"><img src="img/supersenha.jpg" alt="">Super Senha<i class="prog"></i></button>
     <button class="ic" data-id="6799121116" aria-pressed="false"><img src="img/perfilsecreto.jpg" alt="">Perfil<i class="prog"></i></button>
     <button class="ic" data-id="6824300117" aria-pressed="false"><img src="img/censurado.jpg" alt="">Censurado!<i class="prog"></i></button>
@@ -394,13 +458,20 @@
     var icones = Array.prototype.slice.call(nav.querySelectorAll('.ic'));
     var atual = null, timer = null;
     var cartao = function (id) { return palco.querySelector('.jogo[data-id="' + id + '"]'); };
+    // O facho sai do ícone e abre numa base de 150 px que nunca passa da borda do cartão: nos ícones
+    // dos cantos ele inclina para dentro, como a lanterna apontando para o cartão.
     var mira = function () {
       var b = nav.querySelector('.ic.on');
-      if (b) luz.style.transform = 'translateX(' + (b.offsetLeft + b.offsetWidth / 2 - 80) + 'px)';
+      if (!b) return;
+      var w = nav.offsetWidth, x = b.offsetLeft + b.offsetWidth / 2, base = 150;
+      var esq = Math.max(6, Math.min(w - 6 - base, x - base / 2));
+      luz.style.clipPath = 'polygon(' + (x - 9) + 'px 0,' + (x + 9) + 'px 0,' + (esq + base) + 'px 100%,' + esq + 'px 100%)';
+      palco.style.setProperty('--luz-x', (esq + base / 2) + 'px');
     };
     function mostra(botao, anima) {
       if (botao === atual) return;
       var antes = atual && cartao(atual.dataset.id);
+      var volta = atual && icones.indexOf(botao) < icones.indexOf(atual);
       atual = botao;
       icones.forEach(function (b) { b.classList.toggle('on', b === botao); b.setAttribute('aria-pressed', b === botao); });
       mira();
@@ -410,9 +481,9 @@
         antes.classList.add('saindo');
         setTimeout(function () { antes.classList.remove('saindo'); }, 400);
       }
-      novo.classList.remove('entra');
+      novo.classList.remove('entra', 'da-esquerda');
       novo.classList.add('on');
-      if (anima) { void novo.offsetWidth; novo.classList.add('entra'); }
+      if (anima) { void novo.offsetWidth; novo.classList.add('entra'); novo.classList.toggle('da-esquerda', !!volta); }
       var p = botao.querySelector('.prog');
       p.classList.remove('roda'); void p.offsetWidth; p.classList.add('roda');
     }
