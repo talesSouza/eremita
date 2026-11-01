@@ -110,7 +110,7 @@
      até o jogo escolhido. Parado, só a lanterna balança; andando, o passo acelera. A posição vem do JS. */
   .andarilho {
     position: absolute; left: 0; top: 0; z-index: 3; width: 40px; height: 48px; visibility: hidden;
-    transform-origin: 20px 24px; animation: surge .5s ease both; pointer-events: none;
+    transform-origin: 20px 24px; animation: surge .5s ease both; pointer-events: none; will-change: transform;
   }
   .andarilho.pronto { visibility: visible; pointer-events: auto; cursor: pointer; }
   .andarilho svg { transition: transform .6s ease; transform-origin: 50% 100%; }
@@ -118,7 +118,7 @@
   .andarilho.dorme .er-corpo { animation: ronca 2.6s ease-in-out infinite; }
   .andarilho.dorme .er-lanterna { animation: none; transform: rotate(18deg); }
   @keyframes ronca { 50% { transform: translateY(2px) rotate(-3deg); } }
-  .luz.fraca, .palco.fraca::after, .andarilho.dorme .brilho { animation: none !important; opacity: .16; transition: opacity 1s ease; }
+  .luz.fraca, .poca.fraca, .andarilho.dorme .brilho { animation: none !important; opacity: .16; transition: opacity 1s ease; }
   /* Os zzz subindo da cabeça e o "!" do susto. */
   .bolha { position: absolute; z-index: 4; pointer-events: none; font-weight: 900; font-size: 11px; color: var(--creme); }
   .bolha i { position: absolute; left: 0; bottom: 0; font-style: normal; opacity: 0; animation: zzz 2.4s ease-out infinite; }
@@ -130,9 +130,9 @@
   @keyframes susto { 0% { opacity: 0; transform: scale(.4); } 25% { opacity: 1; transform: translateY(-8px) scale(1.2); } 80% { opacity: 1; } 100% { opacity: 0; transform: translateY(-12px); } }
   .andarilho svg { display: block; width: 100%; height: 100%; overflow: visible; }
   .andarilho:not(.anda) .er-corpo, .andarilho:not(.anda) .er-pe, .andarilho:not(.anda) .er-sombra { animation: none; }
-  .andarilho.anda .er-corpo, .andarilho.anda .er-pe { animation-duration: .5s; }
-  .andarilho.anda .er-pe + .er-pe { animation-delay: -.25s; }
-  .andarilho.anda .er-sombra { animation-duration: .25s; }
+  .andarilho.anda .er-corpo, .andarilho.anda .er-pe { animation-duration: .36s; }
+  .andarilho.anda .er-pe + .er-pe { animation-delay: -.18s; }
+  .andarilho.anda .er-sombra { animation-duration: .18s; }
   .brilho {
     position: absolute; left: 13px; top: -7px; width: 44px; height: 44px; border-radius: 50%; opacity: 0;
     background: radial-gradient(closest-side, rgba(255, 223, 160, .55), rgba(255, 212, 71, 0));
@@ -174,9 +174,9 @@
   .ic.on .prog.roda::after { animation: enche 4.5s linear both; }
   .parado .prog { display: none; }
   @keyframes enche { to { transform: scaleX(1); } }
-  @property --luz-x { syntax: '<length>'; inherits: true; initial-value: 50%; }
+  /* O facho começa 55 px acima da lanterna parada, para subir junto quando ele pula. */
   .luz {
-    position: absolute; top: 15px; left: -16px; right: -16px; height: 150px; pointer-events: none; overflow: hidden;
+    position: absolute; top: -40px; left: -16px; right: -16px; height: 200px; pointer-events: none; overflow: hidden;
     background: linear-gradient(rgba(255, 212, 71, .34), rgba(255, 212, 71, .04));
     clip-path: polygon(50% 0, 50% 0, 50% 100%, 50% 100%); opacity: 0;
   }
@@ -192,12 +192,13 @@
 
   /* O cartão do jogo escolhido. Na troca, o novo aparece por cima do anterior (que sai de baixo). */
   .palco { position: relative; margin-top: 16px; touch-action: pan-y; }
-  .palco::after {
-    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 150px; z-index: 2; pointer-events: none;
-    border-radius: 22px 22px 0 0; mix-blend-mode: screen; opacity: 0;
-    background: radial-gradient(ellipse 130px 80px at var(--luz-x) 0, rgba(255, 212, 71, .26), transparent);
+  /* A mancha da lanterna no alto do cartão: anda só por transform, sem repintar o cartão. */
+  .poca-caixa { position: absolute; left: 0; right: 0; top: 0; height: 160px; z-index: 2; pointer-events: none; overflow: hidden; border-radius: 22px 22px 0 0; }
+  .poca {
+    position: absolute; left: -130px; top: 0; width: 260px; height: 160px; opacity: 0; will-change: transform, opacity;
+    background: radial-gradient(ellipse 130px 80px at 50% 0, rgba(255, 212, 71, .22), rgba(255, 212, 71, 0));
   }
-  .palco.acesa::after { animation: acende .9s steps(1) both, chama 2.6s ease-in-out .95s infinite; }
+  .poca.acesa { animation: acende .9s steps(1) both, chama 2.6s ease-in-out .95s infinite; }
   .jogo {
     display: none;
     background: var(--cartao);
@@ -360,6 +361,7 @@
   </nav>
 
   <div class="palco">
+    <div class="poca-caixa" aria-hidden="true"><div class="poca"></div></div>
     <section class="jogo" data-id="6468999579">
       <div class="banner">
         <img src="img/banner-supersenha.jpg" width="960" height="640" alt="Card de palavras do Super Senha com 3 acertos">
@@ -608,18 +610,20 @@
     var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
     var atual = null, timer = null, passo = 0, abertura = true, pulou = false, mexeu = false;
     var bolha = nav.querySelector('.bolha'), sonoT = null, dormindo = false, voltas = 0;
+    var poca = palco.querySelector('.poca'), luzW = 0;
     var cartao = function (id) { return palco.querySelector('.jogo[data-id="' + id + '"]'); };
 
     // O eremita: x é a esquerda dele na fila (40 px de largura), vira para onde anda. A lanterna fica a
     // 35,5 px da esquerda olhando para a direita e a 4,5 px olhando para a esquerda.
     var er = { x: 0, y: 0, lado: 1 };
     var lanterna = function () { return er.x + (er.lado > 0 ? 35.5 : 4.5); };
-    // O facho sai da lanterna e abre numa base de 190 px que passa no máximo 16 px da borda do cartão.
+    // O facho sai da lanterna (e sobe junto quando ele pula) e abre numa base de 190 px que passa no
+    // máximo 16 px da borda do cartão. A largura vem de mede(): ler o layout a cada quadro travava.
     function facho() {
-      var w = luz.offsetWidth, x = lanterna() + 16, base = 190;
-      var esq = Math.max(0, Math.min(w - base, x - base / 2));
-      luz.style.clipPath = 'polygon(' + (x - 10) + 'px 0,' + (x + 10) + 'px 0,' + (esq + base) + 'px 100%,' + esq + 'px 100%)';
-      palco.style.setProperty('--luz-x', (esq + base / 2 - 16) + 'px');
+      var x = lanterna() + 16, y = Math.max(0, 55 + er.y), base = 190;
+      var esq = Math.max(0, Math.min(luzW - base, x - base / 2));
+      luz.style.clipPath = 'polygon(' + (x - 10) + 'px ' + y + 'px,' + (x + 10) + 'px ' + y + 'px,' + (esq + base) + 'px 100%,' + esq + 'px 100%)';
+      poca.style.transform = 'translateX(' + (esq + base / 2 - 16) + 'px)';
     }
     function poe() {
       eremita.style.transform = 'translate(' + er.x + 'px,' + er.y + 'px) scaleX(' + er.lado + ')';
@@ -630,8 +634,8 @@
       var cx = botao.offsetLeft + botao.offsetWidth / 2, lado = cx <= nav.offsetWidth / 2 ? -1 : 1;
       return { x: lado < 0 ? cx - 4.5 : cx - 35.5, lado: lado };
     }
-    var mede = function () { luz.style.height = (palco.offsetTop - nav.offsetTop - 15) + 'px'; };
-    var suave = function (t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; };
+    var mede = function () { luz.style.height = (palco.offsetTop - nav.offsetTop + 40) + 'px'; luzW = luz.offsetWidth; };
+    var suave = function (t) { return (1 - Math.cos(Math.PI * t)) / 2; };
     // Anda (ou pula, com `arco` = altura do pulo em px) até `alvo`, de frente para onde vai, e no fim
     // vira para `lado`.
     function anda(alvo, lado, arco, pronto) {
@@ -639,7 +643,7 @@
       if (calmo || (dist < 1 && !arco)) { er.x = alvo; er.y = 0; er.lado = lado; poe(); if (pronto) pronto(); return; }
       // O relógio começa no primeiro quadro desenhado: com a página ainda escondida, o navegador segura
       // os quadros e, contando do momento da chamada, ele apareceria já pousado.
-      var dur = arco ? (arco > 30 ? 850 : 420) : Math.min(1100, Math.max(350, dist * 5)), t0 = null;
+      var dur = arco ? (arco > 30 ? 720 : 360) : Math.min(750, Math.max(260, dist * 3.2)), t0 = null;
       if (dist >= 1) er.lado = alvo > de.x ? 1 : -1;
       eremita.classList.add('anda');
       requestAnimationFrame(function quadro(agora) {
@@ -701,7 +705,7 @@
     }
     var vizinho = function (d) { return icones[(icones.indexOf(atual) + d + icones.length) % icones.length]; };
     function acende() {
-      [luz, palco, eremita].forEach(function (el) { el.classList.add('acesa'); });
+      [luz, poca, eremita].forEach(function (el) { el.classList.add('acesa'); });
       abertura = false;
       if (calmo || mexeu) return cochila();
       nav.classList.remove('parado');
@@ -734,18 +738,18 @@
       if (eremita.classList.contains('anda')) return cochila();
       dormindo = true;
       eremita.classList.add('dorme');
-      luz.classList.add('fraca'); palco.classList.add('fraca');
+      luz.classList.add('fraca'); poca.classList.add('fraca');
       bolhaNaCabeca(false);
     }
     function acorda() {
       dormindo = false;
       eremita.classList.remove('dorme');
-      luz.classList.remove('fraca'); palco.classList.remove('fraca');
+      luz.classList.remove('fraca'); poca.classList.remove('fraca');
       bolhaNaCabeca(true);
       var b = bolha.querySelector('i'); b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
       setTimeout(function () { if (!dormindo) bolha.hidden = true; }, 700);
       anda(er.x, er.lado, 18);
-      [luz, palco, eremita].forEach(function (el) { el.classList.remove('acesa'); void el.offsetWidth; el.classList.add('acesa'); });
+      [luz, poca, eremita].forEach(function (el) { el.classList.remove('acesa'); void el.offsetWidth; el.classList.add('acesa'); });
     }
     var mexendo = function () { if (dormindo) acorda(); cochila(); };
     ['pointerdown', 'keydown'].forEach(function (ev) { addEventListener(ev, mexendo); });
