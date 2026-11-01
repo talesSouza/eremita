@@ -133,6 +133,10 @@
   .andarilho.anda .er-corpo, .andarilho.anda .er-pe { animation-duration: .36s; }
   .andarilho.anda .er-pe + .er-pe { animation-delay: -.18s; }
   .andarilho.anda .er-sombra { animation-duration: .18s; }
+  /* De ícone em ícone ele vai pulando: no ar as pernas param, e no pouso ele amassa um pouquinho. */
+  .andarilho.pulando .er-corpo, .andarilho.pulando .er-pe, .andarilho.pulando .er-sombra { animation: none; }
+  .andarilho svg.pousa { animation: pousa .22s ease-out; }
+  @keyframes pousa { 0% { transform: scale(1.08, .86); } 100% { transform: none; } }
   .brilho {
     position: absolute; left: 13px; top: -7px; width: 44px; height: 44px; border-radius: 50%; opacity: 0;
     background: radial-gradient(closest-side, rgba(255, 223, 160, .55), rgba(255, 212, 71, 0));
@@ -635,29 +639,53 @@
       return { x: lado < 0 ? cx - 4.5 : cx - 35.5, lado: lado };
     }
     var mede = function () { luz.style.height = (palco.offsetTop - nav.offsetTop + 40) + 'px'; luzW = luz.offsetWidth; };
-    var suave = function (t) { return (1 - Math.cos(Math.PI * t)) / 2; };
-    // Anda (ou pula, com `arco` = altura do pulo em px) até `alvo`, de frente para onde vai, e no fim
-    // vira para `lado`.
-    function anda(alvo, lado, arco, pronto) {
-      var de = { x: er.x, y: er.y }, dist = Math.abs(alvo - de.x), meu = ++passo;
-      if (calmo || (dist < 1 && !arco)) { er.x = alvo; er.y = 0; er.lado = lado; poe(); if (pronto) pronto(); return; }
-      // O relógio começa no primeiro quadro desenhado: com a página ainda escondida, o navegador segura
-      // os quadros e, contando do momento da chamada, ele apareceria já pousado.
-      var dur = arco ? (arco > 30 ? 720 : 360) : Math.min(750, Math.max(260, dist * 3.2)), t0 = null;
-      if (dist >= 1) er.lado = alvo > de.x ? 1 : -1;
-      eremita.classList.add('anda');
+    // Um pulo de onde ele está até `alvo`, com `alto` px de altura, em `dur` ms. Saindo do chão, a sombra
+    // fica no chão e encolhe enquanto ele está no ar.
+    var svg = eremita.querySelector('svg'), somb = eremita.querySelector('.er-sombra');
+    function sombra(y) {
+      somb.style.transform = y ? 'translateY(' + (-y * 3.75) + 'px) scale(' + Math.max(.5, 1 + y / 90) + ')' : '';
+    }
+    function pousa() { svg.classList.remove('pousa'); void svg.getBBox(); svg.classList.add('pousa'); }
+    function voo(alvo, alto, dur, meu, pronto) {
+      var de = { x: er.x, y: er.y }, chao = de.y === 0, t0 = null;
       requestAnimationFrame(function quadro(agora) {
         if (meu !== passo) return;
         if (t0 === null) t0 = agora;
-        var t = Math.min(1, (agora - t0) / dur), e = suave(t);
-        er.x = de.x + (alvo - de.x) * (arco ? t : e);
-        er.y = arco ? de.y * (1 - t * t) - arco * Math.sin(Math.PI * t) : 0;
+        var t = Math.min(1, (agora - t0) / dur);
+        er.x = de.x + (alvo - de.x) * t;
+        er.y = de.y * (1 - t * t) - alto * Math.sin(Math.PI * t);
         poe();
+        if (chao) sombra(er.y);
         if (t < 1) return requestAnimationFrame(quadro);
-        eremita.classList.remove('anda');
-        er.lado = lado; poe();
-        if (pronto) pronto();
+        er.y = 0; poe(); sombra(0); pousa();
+        pronto();
       });
+    }
+    // Vai até `alvo` (com `arco`, num pulo só daquela altura; sem, pulando de ícone em ícone pelo
+    // caminho), de frente para onde vai, e no fim vira para `lado`. O relógio de cada pulo começa no
+    // primeiro quadro desenhado: com a página escondida, contando da chamada, ele apareceria já pousado.
+    function anda(alvo, lado, arco, pronto) {
+      var meu = ++passo, dist = Math.abs(alvo - er.x);
+      var fim = function () { eremita.classList.remove('anda', 'pulando'); er.lado = lado; poe(); if (pronto) pronto(); };
+      if (calmo || (dist < 1 && !arco)) { er.x = alvo; er.y = 0; er.lado = lado; poe(); sombra(0); if (pronto) pronto(); return; }
+      eremita.classList.add('anda', 'pulando');
+      if (dist >= 1) er.lado = alvo > er.x ? 1 : -1;
+      if (arco) return voo(alvo, arco, arco > 30 ? 720 : 360, meu, fim);
+      var dir = er.lado, paradas = [];
+      icones.forEach(function (b) {
+        var x = b.offsetLeft + b.offsetWidth / 2 - (dir > 0 ? 35.5 : 4.5);
+        if ((x - er.x) * dir > 8 && (alvo - x) * dir > 8) paradas.push(x);
+      });
+      paradas.sort(function (a, b) { return (a - b) * dir; });
+      paradas.push(alvo);
+      (function proximo(i) {
+        if (meu !== passo) return;
+        if (i === paradas.length) return fim();
+        var d = Math.abs(paradas[i] - er.x);
+        voo(paradas[i], 14 + d * .12, Math.min(420, 240 + d * .9), meu, function () {
+          setTimeout(function () { proximo(i + 1); }, 50);
+        });
+      })(0);
     }
 
     // A nota e as avaliações contando até o número quando o cartão aparece.
