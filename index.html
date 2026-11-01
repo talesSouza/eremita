@@ -31,12 +31,13 @@
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
-  main { max-width: 440px; margin: 0 auto; padding: 40px 16px 48px; }
+  main { max-width: 440px; margin: 0 auto; padding: 24px 16px 40px; }
 
-  header { text-align: center; margin-bottom: 28px; }
-  .avatar { position: relative; width: 112px; height: 112px; margin: 0 auto 14px; }
+  /* O cabeçalho em linha, para os ícones de todos os jogos caberem na primeira tela. */
+  header { display: flex; align-items: center; gap: 14px; }
+  .avatar { position: relative; width: 68px; height: 68px; flex: none; }
   .avatar::before {
-    content: ""; position: absolute; inset: -18px; border-radius: 50%;
+    content: ""; position: absolute; inset: -12px; border-radius: 50%;
     background: radial-gradient(circle, rgba(255, 212, 71, .22), transparent 68%);
   }
   .avatar svg { position: relative; width: 100%; height: 100%; display: block; }
@@ -64,18 +65,61 @@
   @keyframes er-ceu { to { transform: translateX(-256px); } }
   @media (prefers-reduced-motion: reduce) { .avatar svg * { animation: none !important; } }
 
-  h1 { font-weight: 900; font-size: 30px; letter-spacing: -.3px; }
-  .insta { display: inline-block; margin-top: 2px; color: var(--lanterna); font-weight: 800; font-size: 14px; text-decoration: none; }
+  h1 { font-weight: 900; font-size: 24px; letter-spacing: -.3px; line-height: 1.15; }
+  .insta { display: inline-block; color: var(--lanterna); font-weight: 800; font-size: 14px; text-decoration: none; }
   .insta:hover { color: var(--creme); }
-  .lema { color: var(--apagado); font-weight: 600; font-size: 16px; line-height: 1.45; margin-top: 6px; text-wrap: balance; }
+  .lema { color: var(--apagado); font-weight: 600; font-size: 15px; line-height: 1.45; margin-top: 12px; }
 
+  /* A vitrine: os ícones de todos os jogos em fila e o facho da lanterna do eremita descendo do
+     escolhido até o cartão dele. Sozinha ela passa de jogo em jogo (a barrinha embaixo do ícone);
+     tocou num ícone, rolou ou mexeu no cartão, ela para. */
+  .icones { position: relative; display: flex; justify-content: space-between; margin-top: 22px; }
+  .ic {
+    position: relative; z-index: 1; width: 64px; padding: 0; border: 0; background: none; cursor: pointer;
+    color: var(--apagado); font: 700 11.5px/1.2 Nunito, system-ui, sans-serif; text-align: center;
+    -webkit-tap-highlight-color: transparent; transition: color .3s;
+  }
+  .ic img {
+    display: block; width: 58px; height: 58px; margin: 0 auto 7px; border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+    transition: transform .4s cubic-bezier(.3, 1.4, .5, 1), box-shadow .3s;
+  }
+  .ic.on { color: var(--creme); font-weight: 800; }
+  .ic.on img { transform: translateY(-5px) scale(1.1); box-shadow: 0 0 0 3px var(--lanterna), 0 8px 24px rgba(255, 212, 71, .35); }
+  .prog { position: absolute; left: 14px; right: 14px; bottom: -9px; height: 3px; border-radius: 2px; background: rgba(255, 255, 255, .1); overflow: hidden; opacity: 0; }
+  .prog::after { content: ""; position: absolute; inset: 0; background: var(--lanterna); transform-origin: left; transform: scaleX(0); }
+  .ic.on .prog { opacity: 1; }
+  .ic.on .prog.roda::after { animation: enche 4.5s linear both; }
+  .parado .prog { display: none; }
+  @keyframes enche { to { transform: scaleX(1); } }
+  .luz {
+    position: absolute; top: 40px; left: 0; width: 160px; height: 100px; pointer-events: none;
+    background: linear-gradient(rgba(255, 212, 71, .32), rgba(255, 212, 71, 0));
+    clip-path: polygon(42% 0, 58% 0, 100% 100%, 0 100%);
+  }
+  .luz.anda { transition: transform .45s cubic-bezier(.3, 1.2, .5, 1); }
+
+  /* O cartão do jogo escolhido. Na troca, o novo aparece por cima do anterior (que sai de baixo). */
+  .palco { position: relative; margin-top: 16px; }
   .jogo {
+    display: none;
     background: var(--cartao);
     border: 1px solid var(--borda);
     border-radius: 22px;
     overflow: hidden;
-    margin-bottom: 16px;
   }
+  .jogo.on { display: block; position: relative; z-index: 1; }
+  .jogo.saindo { display: block; position: absolute; top: 0; left: 0; right: 0; }
+  .jogo.entra { animation: aparece .35s ease both; }
+  .jogo.entra .banner img { animation: assenta .45s ease both; }
+  .jogo.entra .corpo > * { animation: sobe .35s cubic-bezier(.2, .8, .3, 1) both; }
+  .jogo.entra .corpo > :nth-child(2) { animation-delay: .04s; }
+  .jogo.entra .corpo > :nth-child(3) { animation-delay: .08s; }
+  .jogo.entra .corpo > :nth-child(4) { animation-delay: .12s; }
+  @keyframes aparece { from { opacity: 0; } }
+  @keyframes assenta { from { transform: scale(1.04); } }
+  @keyframes sobe { from { opacity: 0; transform: translateY(10px); } }
+  @media (prefers-reduced-motion: reduce) { .jogo.entra, .jogo.entra *, .ic img, .luz.anda { animation: none !important; transition: none !important; } }
   /* A arte do jogo (a imagem de busca da App Store, 3:2) no alto do cartão. */
   .banner { position: relative; }
   .banner img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; }
@@ -156,117 +200,130 @@
         </g>
       </svg>
     </div>
-    <h1>Eremita Jogos</h1>
-    <a class="insta" href="https://www.instagram.com/eremita.jogos/">@eremita.jogos</a>
-    <p class="lema">Feito por dev solo, pra jogar com todo mundo :)</p>
+    <div>
+      <h1>Eremita Jogos</h1>
+      <a class="insta" href="https://www.instagram.com/eremita.jogos/">@eremita.jogos</a>
+    </div>
   </header>
+  <p class="lema">Feito por dev solo, pra jogar com todo mundo :)</p>
 
-  <section class="jogo" data-id="6824300117">
-    <div class="banner">
-      <img src="img/banner-censurado.jpg" width="960" height="640" alt="Explique sem dizer as proibidas: o decreto Pão de queijo com as palavras censuradas embaixo da luminária">
-      <span class="novo">NOVO</span>
-    </div>
-    <div class="corpo">
-      <div class="topo">
-        <img class="icone" src="img/censurado.jpg" alt="">
-        <div>
-          <p class="nome">Censurado!</p>
-          <p class="nota"><span>Novo na App Store</span></p>
-        </div>
-      </div>
-      <p class="sobre">Faça seu grupo adivinhar a palavra sem dizer nenhuma das cinco proibidas, antes que o tempo acabe. Escorregou? Alguém grita Censurado!</p>
-      <ul class="fichas"><li>2 ou mais pessoas</li><li>Em grupo ou em times</li></ul>
-      <a class="baixar" href="https://apps.apple.com/br/app/censurado-palavra-proibida/id6824300117">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-        Baixar grátis na App Store
-      </a>
-    </div>
-  </section>
+  <nav class="icones" aria-label="Jogos">
+    <div class="luz"></div>
+    <button class="ic" data-id="6468999579" aria-pressed="false"><img src="img/supersenha.jpg" alt="">Super Senha<i class="prog"></i></button>
+    <button class="ic" data-id="6799121116" aria-pressed="false"><img src="img/perfilsecreto.jpg" alt="">Perfil<i class="prog"></i></button>
+    <button class="ic" data-id="6824300117" aria-pressed="false"><img src="img/censurado.jpg" alt="">Censurado!<i class="prog"></i></button>
+    <button class="ic" data-id="6819165991" aria-pressed="false"><img src="img/sintoniatotal.jpg" alt="">Sintonia<i class="prog"></i></button>
+    <button class="ic" data-id="6809085355" aria-pressed="false"><img src="img/craquefoot.jpg" alt="">Craquefoot<i class="prog"></i></button>
+  </nav>
 
-  <section class="jogo" data-id="6799121116">
-    <div class="banner">
-      <img src="img/banner-perfilsecreto.jpg" width="960" height="640" loading="lazy" alt="Letreiro PERFIL aceso em vermelho sobre as fichas de dica">
-    </div>
-    <div class="corpo">
-      <div class="topo">
-        <img class="icone" src="img/perfilsecreto.jpg" alt="">
-        <div>
-          <p class="nome">Perfil Secreto</p>
-          <p class="nota">★ <b>5,0</b> <span>· <i>12</i> avaliações</span></p>
-        </div>
+  <div class="palco">
+    <section class="jogo" data-id="6468999579">
+      <div class="banner">
+        <img src="img/banner-supersenha.jpg" width="960" height="640" alt="Card de palavras do Super Senha com 3 acertos">
       </div>
-      <p class="sobre">Um segredo por carta. Dez dicas, da mais vaga à quase óbvia. Quem adivinha primeiro, com menos dicas, leva mais pontos.</p>
-      <ul class="fichas"><li>2 ou mais pessoas</li><li>Um lê, a mesa chuta</li></ul>
-      <a class="baixar" href="https://apps.apple.com/br/app/perfil-secreto-jogo-de-dicas/id6799121116">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-        Baixar grátis na App Store
-      </a>
-    </div>
-  </section>
+      <div class="corpo">
+        <div class="topo">
+          <img class="icone" src="img/supersenha.jpg" alt="">
+          <div>
+            <p class="nome">Super Senha</p>
+            <p class="nota">★ <b>4,9</b> <span>· <i>502</i> avaliações</span></p>
+          </div>
+        </div>
+        <p class="sobre">Inspirado no famoso programa de TV, um dá a dica e o outro adivinha. Fácil de explicar, difícil de parar.</p>
+        <ul class="fichas"><li>2 a 8 pessoas</li><li>Em duplas</li></ul>
+        <a class="baixar" href="https://apps.apple.com/br/app/super-senha-jogo-de-palavras/id6468999579">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+          Baixar grátis na App Store
+        </a>
+      </div>
+    </section>
 
-  <section class="jogo" data-id="6819165991">
-    <div class="banner">
-      <img src="img/banner-sintoniatotal.jpg" width="960" height="640" loading="lazy" alt="Uma comida nota ?, com a régua de 0 a 10 e o 7 escolhido">
-      <span class="novo">NOVO</span>
-    </div>
-    <div class="corpo">
-      <div class="topo">
-        <img class="icone" src="img/sintoniatotal.jpg" alt="">
-        <div>
-          <p class="nome">Sintonia Total</p>
-          <p class="nota"><span>Novo na App Store</span></p>
-        </div>
+    <section class="jogo" data-id="6799121116">
+      <div class="banner">
+        <img src="img/banner-perfilsecreto.jpg" width="960" height="640" alt="Letreiro PERFIL aceso em vermelho sobre as fichas de dica">
       </div>
-      <p class="sobre">Uma frase, uma resposta e uma nota de 0 a 10 que só quem respondeu sabe. A mesa chuta a nota, e quem chega mais perto pontua.</p>
-      <ul class="fichas"><li>2 a 12 pessoas</li><li>Em grupo ou em times</li></ul>
-      <a class="baixar" href="https://apps.apple.com/br/app/sintonia-total-qual-a-nota/id6819165991">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-        Baixar grátis na App Store
-      </a>
-    </div>
-  </section>
+      <div class="corpo">
+        <div class="topo">
+          <img class="icone" src="img/perfilsecreto.jpg" alt="">
+          <div>
+            <p class="nome">Perfil Secreto</p>
+            <p class="nota">★ <b>5,0</b> <span>· <i>12</i> avaliações</span></p>
+          </div>
+        </div>
+        <p class="sobre">Um segredo por carta. Dez dicas, da mais vaga à quase óbvia. Quem adivinha primeiro, com menos dicas, leva mais pontos.</p>
+        <ul class="fichas"><li>2 ou mais pessoas</li><li>Um lê, a mesa chuta</li></ul>
+        <a class="baixar" href="https://apps.apple.com/br/app/perfil-secreto-jogo-de-dicas/id6799121116">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+          Baixar grátis na App Store
+        </a>
+      </div>
+    </section>
 
-  <section class="jogo" data-id="6468999579">
-    <div class="banner">
-      <img src="img/banner-supersenha.jpg" width="960" height="640" loading="lazy" alt="Card de palavras do Super Senha com 3 acertos">
-    </div>
-    <div class="corpo">
-      <div class="topo">
-        <img class="icone" src="img/supersenha.jpg" alt="">
-        <div>
-          <p class="nome">Super Senha</p>
-          <p class="nota">★ <b>4,9</b> <span>· <i>502</i> avaliações</span></p>
-        </div>
+    <section class="jogo" data-id="6824300117">
+      <div class="banner">
+        <img src="img/banner-censurado.jpg" width="960" height="640" alt="Explique sem dizer as proibidas: o decreto Pão de queijo com as palavras censuradas embaixo da luminária">
+        <span class="novo">NOVO</span>
       </div>
-      <p class="sobre">Inspirado no famoso programa de TV, um dá a dica e o outro adivinha. Fácil de explicar, difícil de parar.</p>
-      <ul class="fichas"><li>2 a 8 pessoas</li><li>Em duplas</li></ul>
-      <a class="baixar" href="https://apps.apple.com/br/app/super-senha-jogo-de-palavras/id6468999579">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-        Baixar grátis na App Store
-      </a>
-    </div>
-  </section>
+      <div class="corpo">
+        <div class="topo">
+          <img class="icone" src="img/censurado.jpg" alt="">
+          <div>
+            <p class="nome">Censurado!</p>
+            <p class="nota"><span>Novo na App Store</span></p>
+          </div>
+        </div>
+        <p class="sobre">Faça seu grupo adivinhar a palavra sem dizer nenhuma das cinco proibidas, antes que o tempo acabe. Escorregou? Alguém grita Censurado!</p>
+        <ul class="fichas"><li>2 ou mais pessoas</li><li>Em grupo ou em times</li></ul>
+        <a class="baixar" href="https://apps.apple.com/br/app/censurado-palavra-proibida/id6824300117">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+          Baixar grátis na App Store
+        </a>
+      </div>
+    </section>
 
-  <section class="jogo" data-id="6809085355" data-play="https://play.google.com/store/apps/details?id=com.tales.craquefoot">
-    <div class="banner">
-      <img src="img/banner-craquefoot.jpg" width="960" height="640" loading="lazy" alt="Placar de 2 a 2 e a escolha de um lance cara a cara">
-    </div>
-    <div class="corpo">
-      <div class="topo">
-        <img class="icone" src="img/craquefoot.jpg" alt="">
-        <div>
-          <p class="nome">Craquefoot</p>
-          <p class="nota">★ <b>4,6</b> <span>· <i>12</i> avaliações</span></p>
-        </div>
+    <section class="jogo" data-id="6819165991">
+      <div class="banner">
+        <img src="img/banner-sintoniatotal.jpg" width="960" height="640" alt="Uma comida nota ?, com a régua de 0 a 10 e o 7 escolhido">
+        <span class="novo">NOVO</span>
       </div>
-      <p class="sobre">Crie um jogador, herde atributos de lendas do futebol e comece na Série A ou na Série B. Daí em diante, cada partida é sua.</p>
-      <ul class="fichas"><li>Para jogar sozinho</li><li>Carreira no futebol</li></ul>
-      <a class="baixar" href="https://apps.apple.com/br/app/craquefoot/id6809085355">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
-        Baixar grátis na App Store
-      </a>
-    </div>
-  </section>
+      <div class="corpo">
+        <div class="topo">
+          <img class="icone" src="img/sintoniatotal.jpg" alt="">
+          <div>
+            <p class="nome">Sintonia Total</p>
+            <p class="nota"><span>Novo na App Store</span></p>
+          </div>
+        </div>
+        <p class="sobre">Uma frase, uma resposta e uma nota de 0 a 10 que só quem respondeu sabe. A mesa chuta a nota, e quem chega mais perto pontua.</p>
+        <ul class="fichas"><li>2 a 12 pessoas</li><li>Em grupo ou em times</li></ul>
+        <a class="baixar" href="https://apps.apple.com/br/app/sintonia-total-qual-a-nota/id6819165991">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+          Baixar grátis na App Store
+        </a>
+      </div>
+    </section>
+
+    <section class="jogo" data-id="6809085355" data-play="https://play.google.com/store/apps/details?id=com.tales.craquefoot">
+      <div class="banner">
+        <img src="img/banner-craquefoot.jpg" width="960" height="640" alt="Placar de 2 a 2 e a escolha de um lance cara a cara">
+      </div>
+      <div class="corpo">
+        <div class="topo">
+          <img class="icone" src="img/craquefoot.jpg" alt="">
+          <div>
+            <p class="nome">Craquefoot</p>
+            <p class="nota">★ <b>4,6</b> <span>· <i>12</i> avaliações</span></p>
+          </div>
+        </div>
+        <p class="sobre">Crie um jogador, herde atributos de lendas do futebol e comece na Série A ou na Série B. Daí em diante, cada partida é sua.</p>
+        <ul class="fichas"><li>Para jogar sozinho</li><li>Carreira no futebol</li></ul>
+        <a class="baixar" href="https://apps.apple.com/br/app/craquefoot/id6809085355">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.37 12.6c-.02-2.3 1.88-3.4 1.96-3.46-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.82-.81-3-.79-1.54.02-2.97.9-3.76 2.28-1.6 2.78-.41 6.9 1.15 9.16.76 1.1 1.67 2.34 2.86 2.3 1.15-.05 1.58-.74 2.97-.74 1.38 0 1.78.74 2.99.72 1.24-.02 2.02-1.12 2.77-2.23.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.4-.92-2.42-3.66zM14.1 5.86c.63-.77 1.06-1.83.94-2.89-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.8 1.02.08 2.06-.52 2.69-1.28z"/></svg>
+          Baixar grátis na App Store
+        </a>
+      </div>
+    </section>
+  </div>
 
   <footer><a href="https://www.instagram.com/eremita.jogos/">@eremita.jogos</a></footer>
 </main>
@@ -279,7 +336,10 @@
     // Não oferece o jogo de onde a pessoa veio: ela já tem.
     var DE = { supersenha: '6468999579', perfil: '6799121116' };
     var proprio = DE[origem] && document.querySelector('.jogo[data-id="' + DE[origem] + '"]');
-    if (proprio) proprio.remove();
+    if (proprio) {
+      proprio.remove();
+      document.querySelector('.ic[data-id="' + DE[origem] + '"]').remove();
+    }
 
     document.querySelectorAll('a[href^="https://apps.apple.com/"]').forEach(function (link) {
       link.href += (link.href.indexOf('?') < 0 ? '?' : '&') + 'pt=126727673&ct=' + origem + '&mt=8';
@@ -327,6 +387,51 @@
   var s = document.createElement('script');
   s.src = 'https://itunes.apple.com/lookup?country=br&id=' + ids.join(',') + '&callback=notas';
   document.body.appendChild(s);
+
+  // A vitrine: mostra um jogo por vez, passando sozinha até a pessoa tocar, rolar ou mexer no cartão.
+  (function () {
+    var nav = document.querySelector('.icones'), luz = nav.querySelector('.luz'), palco = document.querySelector('.palco');
+    var icones = Array.prototype.slice.call(nav.querySelectorAll('.ic'));
+    var atual = null, timer = null;
+    var cartao = function (id) { return palco.querySelector('.jogo[data-id="' + id + '"]'); };
+    var mira = function () {
+      var b = nav.querySelector('.ic.on');
+      if (b) luz.style.transform = 'translateX(' + (b.offsetLeft + b.offsetWidth / 2 - 80) + 'px)';
+    };
+    function mostra(botao, anima) {
+      if (botao === atual) return;
+      var antes = atual && cartao(atual.dataset.id);
+      atual = botao;
+      icones.forEach(function (b) { b.classList.toggle('on', b === botao); b.setAttribute('aria-pressed', b === botao); });
+      mira();
+      var novo = cartao(botao.dataset.id);
+      if (antes) {
+        antes.classList.remove('on', 'entra');
+        antes.classList.add('saindo');
+        setTimeout(function () { antes.classList.remove('saindo'); }, 400);
+      }
+      novo.classList.remove('entra');
+      novo.classList.add('on');
+      if (anima) { void novo.offsetWidth; novo.classList.add('entra'); }
+      var p = botao.querySelector('.prog');
+      p.classList.remove('roda'); void p.offsetWidth; p.classList.add('roda');
+    }
+    function para() {
+      if (!timer) return;
+      clearInterval(timer); timer = null;
+      nav.classList.add('parado');
+    }
+    mostra(icones[0], false);
+    setTimeout(function () { luz.classList.add('anda'); }, 50);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      timer = setInterval(function () { mostra(icones[(icones.indexOf(atual) + 1) % icones.length], true); }, 4500);
+    } else nav.classList.add('parado');
+    icones.forEach(function (b) { b.addEventListener('click', function () { para(); mostra(b, true); }); });
+    palco.addEventListener('pointerdown', para);
+    addEventListener('scroll', function () { if (scrollY > 40) para(); }, { passive: true });
+    addEventListener('resize', mira);
+    document.fonts && document.fonts.ready.then(mira);
+  })();
 </script>
 </body>
 </html>
