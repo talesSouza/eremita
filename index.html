@@ -625,8 +625,13 @@
     var lanterna = function () { return er.x + (er.lado > 0 ? 35.5 : 4.5); };
     // O facho sai da lanterna (e sobe junto quando ele pula) e abre numa base de 190 px que passa no
     // máximo 16 px da borda do cartão. A largura vem de mede(): ler o layout a cada quadro travava.
+    // Na abertura, apagado, ele já espera no lugar do pouso: o Safari, ao acender, mostra por um instante
+    // o último recorte pintado com ele apagado (o do pulo, lá em cima), então não pode acompanhar o pulo.
+    var pouso = null, pousoDe = null;
     function facho() {
-      var x = lanterna() + 16, y = Math.max(0, 55 + er.y), base = 190;
+      if (abertura && pousoDe !== atual) { pouso = parada(atual); pousoDe = atual; }
+      var p = abertura && pouso, base = 190;
+      var x = (p ? p.x + (p.lado > 0 ? 35.5 : 4.5) : lanterna()) + 16, y = p ? 55 : Math.max(0, 55 + er.y);
       var esq = Math.max(0, Math.min(luzW - base, x - base / 2));
       luz.style.clipPath = 'polygon(' + (x - 10) + 'px ' + y + 'px,' + (x + 10) + 'px ' + y + 'px,' + (esq + base) + 'px 100%,' + esq + 'px 100%)';
       poca.style.transform = 'translateX(' + (esq + base / 2 - 16) + 'px)';
@@ -640,7 +645,7 @@
       var cx = botao.offsetLeft + botao.offsetWidth / 2, lado = cx <= nav.offsetWidth / 2 ? -1 : 1;
       return { x: lado < 0 ? cx - 4.5 : cx - 35.5, lado: lado };
     }
-    var mede = function () { luz.style.height = (palco.offsetTop - nav.offsetTop + 40) + 'px'; luzW = luz.offsetWidth; };
+    var mede = function () { pousoDe = null; luz.style.height = (palco.offsetTop - nav.offsetTop + 40) + 'px'; luzW = luz.offsetWidth; };
     // Um pulo de onde ele está até `alvo`, com `alto` px de altura, em `dur` ms. Saindo do chão, a sombra
     // fica no chão e encolhe enquanto ele está no ar.
     var svg = eremita.querySelector('svg'), somb = eremita.querySelector('.er-sombra');
