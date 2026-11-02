@@ -79,8 +79,10 @@
   .avatar { position: relative; width: 68px; height: 68px; flex: none; }
   .avatar::before {
     content: ""; position: absolute; inset: -12px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255, 212, 71, .22), transparent 68%);
+    background: radial-gradient(circle, rgba(255, 212, 71, .22), transparent 68%); transition: opacity .3s ease;
   }
+  /* Quando ele pula do disco, a luz vai junto (o .brilho dele) e o disco fica no escuro. */
+  .avatar.vazio::before { opacity: 0; }
   .avatar svg { position: relative; width: 100%; height: 100%; display: block; }
 
   /* O eremita caminhando: o corpo sobe e balança a cada passo, os pés aparecem por baixo do manto, a
@@ -141,6 +143,7 @@
     position: absolute; left: 13px; top: -7px; width: 44px; height: 44px; border-radius: 50%; opacity: 0;
     background: radial-gradient(closest-side, rgba(255, 223, 160, .55), rgba(255, 212, 71, 0));
   }
+  .leva .brilho { opacity: 1; animation: surge .3s ease both, chama 2.6s ease-in-out .3s infinite; }
   .acesa .brilho, .brilho.acesa { animation: acende .9s steps(1) both, chama 2.6s ease-in-out .95s infinite; }
   @keyframes surge { from { opacity: 0; } }
 
@@ -733,7 +736,7 @@
     }
     var vizinho = function (d) { return icones[(icones.indexOf(atual) + d + icones.length) % icones.length]; };
     function acende() {
-      [luz, poca, eremita].forEach(function (el) { el.classList.add('acesa'); });
+      [luz, poca].forEach(function (el) { el.classList.add('acesa'); });
       abertura = false;
       if (calmo || mexeu) return cochila();
       nav.classList.remove('parado');
@@ -807,14 +810,16 @@
       er.x = a.left + 60 * k - n.left; er.y = a.top + 40 * k - n.top; er.lado = 1;
       poe();
     }
-    if (calmo) { var p0 = parada(atual); er.x = p0.x; er.lado = p0.lado; eremita.classList.add('pronto'); poe(); acende(); }
+    // A luz do disco é a lanterna dele: sai junto no pulo e chega já acesa (no pouso só o facho acende).
+    var leva = function () { avatar.parentNode.classList.add('vazio'); eremita.classList.add('leva'); };
+    if (calmo) { var p0 = parada(atual); er.x = p0.x; er.lado = p0.lado; eremita.classList.add('pronto'); leva(); poe(); acende(); }
     else {
       noDisco();
       eremita.classList.add('pronto');
       // O pulo só começa com a página na tela, um instante depois dos ícones chegarem.
       var pula = function () {
         if (document.hidden) return document.addEventListener('visibilitychange', pula, { once: true });
-        setTimeout(function () { noDisco(); pulou = true; var p = parada(atual); anda(p.x, p.lado, 48, chega); }, 950);
+        setTimeout(function () { noDisco(); pulou = true; leva(); var p = parada(atual); anda(p.x, p.lado, 48, chega); }, 950);
       };
       pula();
     }
