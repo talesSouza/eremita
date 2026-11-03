@@ -89,6 +89,10 @@
   }
   /* Quando ele pula do disco, a luz vai junto (o .brilho dele) e o disco fica no escuro. */
   .avatar.vazio::before { opacity: 0; }
+  /* E no lugar dele fica a alma: só o contorno, respirando devagar. */
+  .alma { opacity: 0; transition: opacity .6s ease .2s; }
+  .avatar.vazio .alma { opacity: 1; animation: alma 3.2s ease-in-out .8s infinite; }
+  @keyframes alma { 50% { opacity: .45; } }
   .avatar svg { position: relative; width: 100%; height: 100%; display: block; }
 
   /* O eremita caminhando: o corpo sobe e balança a cada passo, os pés aparecem por baixo do manto, a
@@ -364,6 +368,12 @@
           <rect width="256" height="256" fill="#24174D"/>
           <g class="er-ceu longe" fill="#C9A36A" opacity=".35"><use href="#er-poeira"/><use href="#er-poeira" x="256"/></g>
           <g class="er-ceu" fill="#C9A36A" opacity=".8"><use href="#er-estrelas"/><use href="#er-estrelas" x="256"/></g>
+          <!-- A alma: o contorno do eremita no lugar exato do desenho dele (mesmas coordenadas do .andarilho). -->
+          <g class="alma" fill="none" stroke="#FFF4E0" stroke-opacity=".6" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M166 213V72q0-14 13.5-14T193 72v7"/>
+            <rect x="184" y="84" width="18" height="24" rx="4"/>
+            <path d="M71 207C66 170 68 122 84 88 96 64 111 51 125 44c13 26 25 66 33 106 4 25 5 45 5 57q0 5-5 5H76q-5 0-5-5z"/>
+          </g>
         </g>
       </svg>
     </div>
