@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mascote do Jogo do Milhão em repouso: microfone de fita de cartola, bigode e paletó de veludo" width="480" height="848" viewBox="80 20 240 424">
+  <defs>
+    <clipPath id="grilleClip"><path d="M118 270 V 162 A 82 82 0 0 1 282 162 V 270 Z"/></clipPath>
+    <clipPath id="crownClip"><path d="M164 80 L 169 20 Q 205 13 241 20 L 246 80 Z"/></clipPath>
+  </defs>
+      <path d="M118 270 V 162 A 82 82 0 0 1 282 162 V 270 Z" fill="#CDBFA4"/>
+      <g clip-path="url(#grilleClip)">
+        <rect x="262" y="70" width="24" height="210" fill="#B9A98C"/>
+        <rect x="133" y="70" width="11" height="210" fill="#E3D7BD"/>
+        <path d="M110 96 H290 M110 107 H290 M110 118 H290 M110 129 H290 M110 140 H290 M110 151 H290 M110 162 H290 M110 173 H290 M110 184 H290 M110 195 H290 M110 206 H290 M110 217 H290 M110 228 H290 M110 239 H290 M110 250 H290 M110 261 H290" stroke="#2A1A14" stroke-opacity="0.13" stroke-width="2.5"/>
+      </g>
+      <g transform="rotate(10 210 86) translate(210 86) scale(.74) translate(-205 -84)">
+        <path d="M164 80 L 169 20 Q 205 13 241 20 L 246 80 Z" fill="#5B3523"/>
+        <rect x="160" y="58" width="90" height="12" fill="#D4622A" clip-path="url(#crownClip)"/>
+        <path d="M164 80 L 169 20 Q 205 13 241 20 L 246 80 Z" fill="none" stroke="#2A1A14" stroke-width="3.5" stroke-linejoin="round"/>
+        <rect x="144" y="76" width="122" height="13" rx="6.5" fill="#5B3523" stroke="#2A1A14" stroke-width="3.5"/>
+      </g>
+      <!-- anel de metal entre a grade e o corpo -->
+      <rect x="114" y="264" width="172" height="20" rx="3" fill="#8F8169"/>
+      <rect x="114" y="264" width="172" height="5" rx="2" fill="#A89A80"/>
+      <circle cx="125" cy="276" r="3" fill="#5E5444"/>
+      <circle cx="275" cy="276" r="3" fill="#5E5444"/>
+      <path d="M126 284 H 274 V 372 C 274 414, 242 436, 200 436 C 158 436, 126 414, 126 372 Z" fill="#7C2B2B"/>
+      <path d="M180 284 L 138 284 L 168 350 L 199 370 Z" fill="#5C1E20"/>
+      <path d="M220 284 L 262 284 L 232 350 L 201 370 Z" fill="#5C1E20"/>
+      <path d="M180 284 H 220 L 200 346 Z" fill="#F1E2C4"/>
+      <path d="M193 296 H 207 L 214 340 L 200 360 L 186 340 Z" fill="#D4622A"/>
+      <path d="M189.5 318 L 210.5 306 L 212 316 L 188.5 330 Z M187 340 L 213 325 L 214 336 L 190 350 Z" fill="#E2A33B"/>
+      <path d="M191 286 H 209 L 206 298 H 194 Z" fill="#A9461D"/>
+    
+      <path d="M150 152 Q 170 141 192 149" fill="none" stroke="#2A1A14" stroke-width="9" stroke-linecap="round"/>
+      <path d="M210 141 Q 232 126 254 139" fill="none" stroke="#2A1A14" stroke-width="9" stroke-linecap="round"/>
+      <ellipse cx="172" cy="176" rx="16" ry="18" fill="#F6EBD3"/>
+      <ellipse cx="231" cy="173" rx="16" ry="18" fill="#F6EBD3"/>
+      <circle cx="177" cy="184" r="7.5" fill="#2A1A14"/>
+      <circle cx="236" cy="180" r="7.5" fill="#2A1A14"/>
+      <path d="M155 177 A 17 19 0 0 1 189 177 Z" fill="#8C7A5E"/>
+      <path d="M154 177 H 190" stroke="#2A1A14" stroke-width="4" stroke-linecap="round"/>
+      <path d="M214 167 A 17 19 0 0 1 248 167 Z" fill="#8C7A5E"/>
+      <path d="M213 167 H 249" stroke="#2A1A14" stroke-width="4" stroke-linecap="round"/>
+      <ellipse cx="203" cy="200" rx="12" ry="10" fill="#B45736"/>
+      <path d="M202 208 C 188 204, 166 207, 150 224 C 168 219, 182 223, 202 217 C 222 223, 236 219, 254 224 C 238 207, 216 204, 202 208 Z" fill="#2A1A14"/>
+      <path d="M186 234 Q 207 240 228 228" fill="none" stroke="#2A1A14" stroke-width="5" stroke-linecap="round"/>
+    </svg>
